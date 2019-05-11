@@ -4,9 +4,40 @@
 #include <stdlib.h>
 #include "InitGame.h"
 
+/**
+* 저장소 명칭: OSS_2048
+* 프로젝트 목적: C Code로 작성된 2048 game을 git과 github를 통해 가독성 중심의 Clean code로 개선
+* 작성자: 이은형, 전지민, 천승아
+
+* 원저장소 명칭: 2048-game
+* 원파일명: 2048.c
+* 원작성자: mustafakbulut
+* 원작성일: 2019/3/16
+* 출처: https://github.com/mustafakbulut/2048-game
+*/
+
 int main() {
-	int **cur_board, size, **pre_board, *emptyIndex;
-	int cur_score, high_score, pre_score, sum;
+
+	/*
+	- int **cur_board: 현재 gameboard 나타내는 2차원 배열
+	- int **pre_board: 이전(한 타임 전) gameboard 나타내는 2차원 배열
+	- int size: cur_board의 크기 (size X size)
+	- int sum: cur_board의 값 모두 더한 결과 저장
+	- int cur_score: 현재 점수(=sum) 저장
+	- int pre_score: 이전 점수 저장
+	- int high_score: 게임 중 가장 높은 점수 저장
+	- int *emptyIndex: 랜덤 수(2 or 4) 생성 시 cur_board에서 값이 없는 빈 곳의 위치들을 저장
+	- int randomNum: 랜덤 수 저장
+	- int emptyTile: 현재 비어있는 타일의 개수 저장 (emptyIndex의 크기)
+	- int randomIndex: emptyIndex에서 추출된 임의의 빈 곳 위치를 저장-> 이 위치에 랜덤 수 넣음
+	- int isGameover: 게임 종료 여부 저장
+	- int isWin: 게임의 승패 여부
+	- int i, j, k: 반복문 실행 시 Index
+	- int flag: 이동 후 인접 타일 더할 때 두 번 이상 반복해 더함 방지
+	*/
+
+	int **cur_board=NULL, **pre_board=NULL, *emptyIndex=NULL;
+	int size, cur_score, high_score, pre_score, sum;
 	int isGameover=0, isWin;
 	int emptyTile=1, randomNum, randomIndex=0;
 	int i, j, k, flag=0;
@@ -14,53 +45,17 @@ int main() {
 	printf("Enter the desired game board size: ");
 	scanf("%d", &size);
 
-	cur_board=(int **)malloc(sizeof(int *)*size);
-	pre_board=(int **)malloc(sizeof(int *)*size);
+	cur_board=setUp(cur_board, size);//메모리 할당 후 값 0으로 초기화
+	pre_board=allocateArr(pre_board, size);//메모리 할당
 	emptyIndex=(int *)malloc(sizeof(int)*(size*size));
 
-	for (i=0; i<size; i++)
-		cur_board[i]=(int *)malloc(sizeof(int)*size);
-	for (i=0; i<size; i++)
-		pre_board[i]=(int *)malloc(sizeof(int)*size);
-
-	for (i=0; i<size; i++) {
-		for (j=0; j<size; j++) {
-			cur_board[i][j]=0;
-		}
-	}
-	for (i=0; i<size; i++) {
-		for (j=0; j<size; j++) {
-			pre_board[i][j]=0;
-		}
-	}
-
-
-	setUp();
 	srand(time(NULL));
 
 	pre_score=0;
 	cur_score=0;
 	high_score=0;
-
-	i=rand()%size;
-	j=rand()%size;
-	randomNum=((rand()%2)+1)*2;
-	cur_board[i][j]=randomNum;
-
-	i=rand()%size;
-	j=rand()%size;
-	randomNum=((rand()%2)+1)*2;
-	cur_board[i][j]=randomNum;
-
 	sum=0;
-	for (i=0; i < size; i++) {
-		for (j=0; j < size; j++) {
-			sum+=cur_board[i][j];
-		}
-	}
 
-	high_score=sum;
-	cur_score=sum;
 	for (i=0; i < size; i++) {
 		for (j=0; j<size; j++) {
 			if (j==0)
