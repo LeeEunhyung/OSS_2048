@@ -2,7 +2,8 @@
 
 char key;
 
-void setUp();
+int** setUp(int **arr, int size);
+int** allocateArr(int **arr, int size);
 void printBoard();
 void findEmpty();
 
