@@ -39,17 +39,53 @@ void inputKey() {}
 void refreshGame() {}
 void undo() {}
 
-void moveRight() {}
-void moveLeft() {}
-void moveUp() {}
-void moveDown() {}
 
-void pushRight() {}
-void pushLeft() {}
-void pushUp() {}
-void pushDown() {}
+void save(int **cur_board, int **pre_board, int *cur_scroe, int *pre_score);
+void push(int **cur_board, int vecx, int vecy);
+void merge(int **cur_board, int vecx, int vecy);
+bool checkMove(int **cur_board, int **pre_board);
+void printBoard(int **cur_board, int **pre_board, int *cur_score, int *pre_score);
 
-void mergeRight() {}
-void mergeLeft() {}
-void mergeUp() {}
-void mergeDown() {}
+int move(char key, int **cur_board, int **pre_board) {
+	
+	int vecx = 0;
+	int vecy = 0;
+	
+	/* 블럭이 움직이는 방향에따른 벡터값을 부여합니다. */
+
+	switch (key) {
+	case w:
+		vecx = 	0;
+		vecy = -1;
+	break;
+	case a:
+		vecx = -1;
+		vecy = 	0;
+	break;
+	case s:
+		vecx = 	0;
+		vecy = 	1;
+	break;
+	case d:
+		vecx =	1;
+		vecy = 	0;
+	break;
+	}
+	
+	push(cur_board, vecx, vecy);
+	
+	merge(cur_board, vecx, vecy);
+
+	if(checkMove(int **cur_board, int **pre_board)){ /* 블록이  전혀 움직이지 않은 경우 
+							    1을 반환하고 함수를 종료합니다.*/
+		return 1;
+	}
+	
+	push(cur_board, vecx, vecy);
+
+}
+
+void updateScore(int **cur_board, int *cur_score, int *high_score)
+
+
+
