@@ -41,43 +41,151 @@ void undo() {}
 
 
 void save(int **cur_board, int **pre_board, int *cur_scroe, int *pre_score);
-void push(int **cur_board, int vecx, int vecy);
-void merge(int **cur_board, int vecx, int vecy);
-bool checkMove(int **cur_board, int **pre_board);
+void push(int **cur_board, char key, int size){
+	int k = 0;
+	int i = 0;
+	int j = 0;
+	
+	switch (key){
+	case w:
+		for (k=0; k<=size-2; k++) {
+			for (j=0; j<=size-1; j++) {
+				for (i=0; i<size-1; i++) {
+					if (cur_board[i][j]==0&&cur_board[i+1][j]!=0) {
+						cur_board[i][j]=cur_board[i+1][j];
+						cur_board[i+1][j]=0;
+					}
+				}
+			}
+		}
+
+		break;
+	case a:
+		for (k=0; k<=size-2; k++) {
+			for (i=0; i<=size-1; i++) {
+				for (j=size-1; j > 0; j--) {
+					if (cur_board[i][j]!=0&&cur_board[i][j-1]==0) {
+						cur_board[i][j-1]=cur_board[i][j];
+						cur_board[i][j]=0;
+					}
+				}
+			}
+		}
+
+		break;
+	case s:
+		for (k=0; k<=size-1; k++) {
+			for (j=0; j<=size-1; j++) {
+				for (i=size-1; i>0; i--) {
+					if (cur_board[i][j]==0&&cur_board[i-1][j]!=0) {
+						cur_board[i][j]=cur_board[i-1][j];
+						cur_board[i-1][j]=0;
+					}
+				}
+			}
+		}
+		break;
+	case d:
+		for (k=0; k<=size-2; k++) {
+			for (i=0; i<=size-1; i++) {
+				for (j=0; j < size-1; j++) {
+					if (cur_board[i][j]!=0&&cur_board[i][j+1]==0) {
+						cur_board[i][j+1]=cur_board[i][j];
+						cur_board[i][j]=0;
+					}
+				}
+			}
+		}
+		break;
+	}
+}
+
+void merge(int **cur_board, char key, int size){
+
+	int i = 0;
+	int j = 0;
+	int flag = 0;
+	
+	switch (key){
+	case w:
+		for (j = 0; j <= size - 1; j++) {
+			i = 0;
+			flag = 0;
+			while (i < size - 1 && flag == 0) {
+
+				if (cur_board[i][j] == cur_board[i + 1][j] && cur_board[i][j] != 0) {
+					cur_board[i][j] = cur_board[i + 1][j] + cur_board[i][j];
+					cur_board[i + 1][j] = 0;
+					flag = 1;
+				}
+				i = i + 1;
+			}
+		}
+		break;
+	case a:
+		for (i = 0; i <= size - 1; i++) {
+			j = 0;
+			flag = 0;
+			while (j <= size - 2 && flag == 0) {
+				if (cur_board[i][j] == cur_board[i][j + 1]&&cur_board[i][j] != 0) {
+					cur_board[i][j] = cur_board[i][j + 1] + cur_board[i][j];
+					cur_board[i][j + 1] = 0;
+					flag = 1;
+				}
+				j = j + 1;
+			}
+		}
+		break;
+	case s:
+		for (j=0; j <= size - 1; j++) {
+			i = size - 1;
+			flag = 0;
+			while (i>0 && flag == 0) {
+				if (cur_board[i][j] == cur_board[i - 1][j] && cur_board[i][j] != 0) {
+					cur_board[i][j] = cur_board[i - 1][j] + cur_board[i][j];
+					cur_board[i - 1][j] = 0;
+					flag = 1;
+				}
+				i = i - 1;
+			}
+		}
+		break;
+	case d:
+		for (i=0; i <= size - 1; i++) {
+			j = 0;
+			flag = 0;
+			while (j <= size - 2 && flag == 0) {
+				if (cur_board[i][j] == cur_board[i][j + 1] && cur_board[i][j] != 0) {
+					cur_board[i][j + 1] = cur_board[i][j + 1] + cur_board[i][j];
+					cur_board[i][j] = 0;
+					flag = 1;
+				}
+				j = j + 1;
+			}
+		}
+		break;
+	}
+}
+	
+bool checkMove(int **cur_board, int **pre_board, size){		/*보드에 변경사항이 있는지 검사하고 변경사항이 있으면 조기리턴한다.*/
+	for (i = 0; i < size; i++){
+		for (j = 0; j < size; j++){
+			if(cur_board[i][j] != pre_bord[i][j])
+				return false;
+		}
+	}
+	return true;
+};
 void printBoard(int **cur_board, int **pre_board, int *cur_score, int *pre_score);
 
-int move(char key, int **cur_board, int **pre_board) {
+int move(char key, int **cur_board, int **pre_board, int size) { /* 블록을 옮기고 붙어있는 블럭을 합치고 다시 한 번 블록을 옮긴다. 
+								    merge 이후 생기는 틈을 매꾼다.*/ 
+	push(cur_board, key);
 	
-	int vecx = 0;
-	int vecy = 0;
-	
-	/* 블럭이 움직이는 방향에따른 벡터값을 부여합니다. */
-
-	switch (key) {
-	case w:
-		vecx = 	0;
-		vecy = -1;
-	break;
-	case a:
-		vecx = -1;
-		vecy = 	0;
-	break;
-	case s:
-		vecx = 	0;
-		vecy = 	1;
-	break;
-	case d:
-		vecx =	1;
-		vecy = 	0;
-	break;
-	}
-	
-	push(cur_board, vecx, vecy);
-	
-	merge(cur_board, vecx, vecy);
+	merge(cur_board, key);
 
 	if(checkMove(int **cur_board, int **pre_board)){ /* 블록이  전혀 움직이지 않은 경우 
-							    1을 반환하고 함수를 종료합니다.*/
+							    1을 반환하고 함수를 종료한다. 움직이지 않았을때 다시 키를 받도록 한다. */
 		return 1;
 	}
 	
