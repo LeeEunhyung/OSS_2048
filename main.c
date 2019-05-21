@@ -1,8 +1,18 @@
 #include <stdio.h>
 #include <time.h>
-#include <conio.h>
 #include <stdlib.h>
+
+#ifdef _WIN32
+
 #include "InitGame.h"
+#include <conio.h>
+
+#elif __linux__
+
+#include "InitGame.c" //HACK: gcc 컴파일러에 InitGame.h를 추가하지 못함 -> 함수 정의 부분인 InitGame.c를 바로 링크
+#include <termios.h>
+
+#endif //windowsOS나 linuxOS에 구애받지 않게 하기위해 추가
 
 /*
 * 저장소 명칭: OSS_2048
@@ -541,3 +551,4 @@ int main() {
 	_getch();
 	return 0;
 }
+

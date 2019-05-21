@@ -1,5 +1,11 @@
 #pragma once
 
+#ifdef __linux__
+
+int _getch();
+
+#endif
+
 char key;
 
 int** setUp(int **arr, int size);
@@ -25,3 +31,4 @@ void mergeRight();
 void mergeLeft();
 void mergeUp();
 void mergeDown();
+
