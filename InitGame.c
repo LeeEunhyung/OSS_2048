@@ -1,5 +1,3 @@
-#include "pch.h"
-
 #include "InitGame.h"
 #include <stdlib.h>
 #include <string.h>
@@ -34,7 +32,7 @@ int** setUp(int **arr, int size) {
 	return arr;
 }//메모리 할당된 arr에 랜덤 수 2개 생성
 
-void printBoard() {}
+
 void findEmpty() {}
 
 void inputKey() {}
@@ -90,7 +88,7 @@ void push(int **cur_board, char key, int size) {
 		break;
 	case 's':
 	case 'S':
-		for (k = 0; k <= size - 1; k++) {
+		for (k = 0; k <= size - 2; k++) {
 			for (j = 0; j <= size - 1; j++) {
 				for (i = size - 1; i > 0; i--) {
 					if (cur_board[i][j] == 0 && cur_board[i - 1][j] != 0) {
@@ -188,7 +186,7 @@ void merge(int **cur_board, char key, int size) {
 	}
 }
 
-int checkMove(int **cur_board, int **pre_board, int size) {	/* 보드에 변경사항이 있는지 검사하고 변경사항이 있으면 조기리턴한다. */
+int checkMove(int **cur_board, int **pre_board, int size) {
 	int i = 0;
 	int j = 0;
 
@@ -199,7 +197,7 @@ int checkMove(int **cur_board, int **pre_board, int size) {	/* 보드에 변경�
 		}
 	}
 	return 1;
-};
+}//보드에 변경사항이 있는지 검사하고 변경사항이 있으면 조기리턴한다.
 
 void printBoard(int **cur_board, int **pre_board, int *cur_score, int *pre_score) {}
 
@@ -227,20 +225,18 @@ void spawnBlock(int **cur_board, int *emptyIndex, int size) {
 
 }
 
-int move(char key, int **cur_board, int **pre_board, int size) { /* 블록을 옮기고 붙어있는 블럭을 합치고 다시 한 번 블록을 옮긴다.
-									merge 이후 생기는 틈을 매꾼다.*/
+int move(char key, int **cur_board, int **pre_board, int size) { 
 	push(cur_board, key, size);
 
 	merge(cur_board, key, size);
 
-	if (checkMove(cur_board, pre_board, size)) { /* 블록이  전혀 움직이지 않은 경우
-								1을 반환하고 함수를 종료한다. 움직이지 않았을때 다시 키를 받도록 한다. */
+	if (checkMove(cur_board, pre_board, size)) { 
 		return 1;
-	}
+	}//블록이  전혀 움직이지 않은 경우 1을 반환하고 함수를 종료. 움직이지 않았을때 다시 키를 받도록 한다.
 
 	push(cur_board, key, size);
 
-}
+}//블록을 옮기고 붙어있는 블럭을 합치고 다시 한 번 블록을 옮긴다. merge 이후 생기는 틈을 매꾼다.
 
 void updateScore(int **cur_board, int *cur_score, int *high_score, int size) {
 
