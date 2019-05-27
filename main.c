@@ -39,7 +39,6 @@ int main() {
 	- int randomNum: 랜덤 수 저장
 	- int emptyTile: 현재 비어있는 타일의 개수 저장 (emptyIndex의 크기)
 	- int randomIndex: emptyIndex에서 추출된 임의의 빈 곳 위치를 저장-> 이 위치에 랜덤 수 넣음
-	- int isGameover: 게임 종료 여부 저장
 	- int isWin: 게임의 승패 여부
 	- int i, j, k: 반복문 실행 시 Index
 	- int flag: 이동 후 인접 타일 더할 때 두 번 이상 반복해 더함 방지
@@ -47,7 +46,7 @@ int main() {
 
 	int **cur_board = NULL, **pre_board = NULL, *emptyIndex = NULL;
 	int size, cur_score, high_score, pre_score, sum;
-	int isGameover = 0, isWin;
+	int isWin;
 	int emptyTile = 1, randomNum, randomIndex = 0;
 	int i, j, k, flag = 0;
 
@@ -364,30 +363,12 @@ int main() {
 
 			undo(cur_board, pre_board, size);
 		}
-		isGameover = 0;
-		for (i = 0; i <= size - 1; i++) {
-			for (j = 0; j <= size - 1; j++) {
-				if (cur_board[i][j] == 0) {
-					isGameover = 1;
-				}
-			}
+
+		if(isGameOver(cur_board, size) == 1)
+		{
+			break;
 		}
-		for (i = 0; i <= size - 2; i++) {
-			for (j = 0; j <= size - 2; j++) {
-				if (i == size - 1 && j != size - 1 && cur_board[i][j] == cur_board[i][j + 1]) {
-					isGameover = 1;
-				}
-				if (j == size - 1 && i != size - 1 && cur_board[i][j] == cur_board[i + 1][j]) {
-					isGameover = 1;
-				}
-				if (cur_board[i][j] == cur_board[i + 1][j] || cur_board[i][j] == cur_board[i][j + 1]) {
-					isGameover = 1;
-				}
-			}
-		}
-		if (isGameover != 1) {
-			key = 'e';
-		}
+
 		i = 1;
 		j = 1;
 		isWin = 0;

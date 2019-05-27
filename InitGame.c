@@ -6,8 +6,7 @@
 #ifdef __linux__
 
 #include <termios.h>
-int _getch()
-{
+int _getch(){
   int ch;
 
   struct termios buf;
@@ -63,7 +62,6 @@ int** setUp(int **arr, int size) {
 
 void findEmpty() {}
 
-void inputKey() {}
 void refreshGame(int **cur_board, int *cur_score, int size) {
   int i = 0, j = 0;
   cur_score = 0;
@@ -83,6 +81,32 @@ void undo(int **cur_board, int **pre_board, int size) {
     }
   }
 } //최근 방향키 움직임을 취소하고 이전의 상태로 복원
+int isGameOver(int **cur_board, int size) {
+  int i = 0, j = 0;
+
+  for (i = 0; i <= size - 1; i++) {
+    for (j = 0; j <= size - 1; j++) {
+      if (cur_board[i][j] == 0) {
+        return 0;
+      }
+    }
+  }
+  for (i = 0; i <= size - 2; i++) {
+    for (j = 0; j <= size - 2; j++) {
+      if (i == size - 1 && j != size - 1 && cur_board[i][j] == cur_board[i][j + 1]) {
+        return 0;
+      }
+      if (j == size - 1 && i != size - 1 && cur_board[i][j] == cur_board[i + 1][j]) {
+        return 0;
+      }
+      if (cur_board[i][j] == cur_board[i + 1][j] || cur_board[i][j] == cur_board[i][j + 1]) {
+        return 0;
+      }
+    }
+  }
+
+  return 1;
+} //반환값이 1이면 게임 오버되어 키 입력 불가
 
 void save(int **cur_board, int **pre_board, int *cur_score, int *pre_score, int size) {
 	int i = 0;

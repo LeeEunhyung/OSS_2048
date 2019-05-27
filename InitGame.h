@@ -13,9 +13,9 @@ int** allocateArr(int **arr, int size);
 
 void findEmpty();
 
-void inputKey();
 void refreshGame(int **cur_board, int *cur_score, int size);
 void undo(int **cur_board, int **pre_board, int size);
+int isGameOver(int **cur_board, int size);
 
 void save(int **cur_board, int **pre_board, int *cur_score, int *pre_score, int size);
 
