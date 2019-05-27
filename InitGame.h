@@ -27,7 +27,7 @@ void spawnBlock(int **cur_board, int *emptyIndex, int size);
 
 int checkMove(int **cur_board, int **pre_board, int size);
 
-void printBoard(int **cur_board, int **pre_board, int *cur_score, int *pre_score);
+void printBoard(int **cur_board, int **pre_board, int *cur_score_p, int *pre_score_p, int *high_score_p, int size);
 
 int move(char key, int **cur_board, int **pre_board, int size);
 
