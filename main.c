@@ -315,12 +315,8 @@ int main() {
 			printf("Score:%d\nHigh Score=%d", cur_score, high_score);
 		}
 		if (key == 'x') {
-			cur_score = 0;
-			for (i = 0; i <= size - 1; i++) {
-				for (j = 0; j <= size - 1; j++) {
-					cur_board[i][j] = 0;
-				}
-			}
+			refreshGame(cur_board, &cur_score, size);
+
 			system("CLS");
 			for (i = 0; i < size; i++) {
 				for (j = 0; j < size; j++) {
@@ -365,6 +361,7 @@ int main() {
 			}
 			printf("\nThe current state\n");
 			printf("Score:%d\nHigh Score:%d", pre_score, high_score);
+
 			undo(cur_board, pre_board, size);
 		}
 		isGameover = 0;
