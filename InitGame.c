@@ -213,7 +213,33 @@ int checkMove(int **cur_board, int **pre_board, int size) {
 	return 1;
 }//보드에 변경사항이 있는지 검사하고 변경사항이 있으면 조기리턴한다.
 
-void printBoard(int **cur_board, int **pre_board, int *cur_score, int *pre_score) {}
+void printBoard(int **cur_board, int **pre_board, int *cur_score_p, int *pre_score_p, int *high_score_p, int size) {
+	int i = 0;
+	int j = 0;
+
+	system("CLS");
+	for (i = 0; i < size; i++) {
+		for (j = 0; j < size; j++) {
+			if (j == 0)
+				printf("|");
+			printf(" %4d   |", pre_board[i][j]);
+		}
+		printf("\n");
+	}
+	printf("\nThe previous state\n");
+	printf("Score:%d\nHigh Score:%d\n", *pre_score_p, *high_score_p);
+	for (i = 0; i < size; i++) {
+		for (j = 0; j < size; j++) {
+			if (j == 0)
+				printf("|");
+			printf(" %4d   |", cur_board[i][j]);
+		}
+		printf("\n");
+	}
+	updateScore(cur_board, cur_score_p, high_score_p, size);
+	printf("\nThe current state\n");
+	printf("Score:%d\nHigh Score:%d", *cur_score_p, *high_score_p);
+}
 
 void spawnBlock(int **cur_board, int *emptyIndex, int size) {
 
@@ -252,7 +278,5 @@ int move(char key, int **cur_board, int **pre_board, int size) {
 
 }//블록을 옮기고 붙어있는 블럭을 합치고 다시 한 번 블록을 옮긴다. merge 이후 생기는 틈을 매꾼다.
 
-void updateScore(int **cur_board, int *cur_score, int *high_score, int size) {
-
-}
+void updateScore(int **cur_board, int *cur_score_p, int *high_score_p, int size) {}
 
