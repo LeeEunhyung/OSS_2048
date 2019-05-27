@@ -199,15 +199,15 @@ void merge(int **cur_board, char key, int size) {
 	case 'd':
 	case 'D':
 		for (i = 0; i <= size - 1; i++) {
-			j = 0;
+			j = size - 1;
 			flag = 0;
-			while (j <= size - 2 && flag == 0) {
-				if (cur_board[i][j] == cur_board[i][j + 1] && cur_board[i][j] != 0) {
-					cur_board[i][j + 1] = cur_board[i][j + 1] + cur_board[i][j];
+			while (j > 0 && flag == 0) {
+				if (cur_board[i][j] == cur_board[i][j - 1] && cur_board[i][j] != 0) {
+					cur_board[i][j - 1] = cur_board[i][j - 1] + cur_board[i][j];
 					cur_board[i][j] = 0;
 					flag = 1;
 				}
-				j = j + 1;
+				j = j - 1;
 			}
 		}
 		break;
