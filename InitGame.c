@@ -8,25 +8,25 @@
 #include <termios.h>
 int _getch()
 {
-  int ch;
+	int ch;
 
-  struct termios buf;
-  struct termios save;
+	struct termios buf;
+	struct termios save;
 
-  tcgetattr(0, &save);
-  buf = save;
+	tcgetattr(0, &save);
+	buf = save;
 
-  buf.c_lflag &= ~(ICANON|ECHO);
-  buf.c_cc[VMIN] = 1;
-  buf.c_cc[VTIME] = 0;
+	buf.c_lflag &= ~(ICANON | ECHO);
+	buf.c_cc[VMIN] = 1;
+	buf.c_cc[VTIME] = 0;
 
-  tcsetattr(0, TCSAFLUSH, &buf);
+	tcsetattr(0, TCSAFLUSH, &buf);
 
-  ch = getchar();
+	ch = getchar();
 
-  tcsetattr(0, TCSAFLUSH, &save);
+	tcsetattr(0, TCSAFLUSH, &save);
 
-  return ch;
+	return ch;
 }
 
 #endif //_getch가 정의된 conio 라이브러리가 없기 때문에 _getch 함수를 직접 정의
@@ -147,67 +147,53 @@ void merge(int **cur_board, char key, int size) {
 
 	int i = 0;
 	int j = 0;
-	int flag = 0;
 
 	switch (key) {
 	case 'w':
 	case 'W':
 		for (j = 0; j <= size - 1; j++) {
-			i = 0;
-			flag = 0;
-			while (i < size - 1 && flag == 0) {
-
+			for (i = 0; i < size - 1; i++) {
 				if (cur_board[i][j] == cur_board[i + 1][j] && cur_board[i][j] != 0) {
 					cur_board[i][j] = cur_board[i + 1][j] + cur_board[i][j];
 					cur_board[i + 1][j] = 0;
-					flag = 1;
+					i++;
 				}
-				i = i + 1;
 			}
 		}
 		break;
 	case 'a':
 	case 'A':
 		for (i = 0; i <= size - 1; i++) {
-			j = 0;
-			flag = 0;
-			while (j <= size - 2 && flag == 0) {
+			for (j = 0; j <= size - 2; j++) {
 				if (cur_board[i][j] == cur_board[i][j + 1] && cur_board[i][j] != 0) {
 					cur_board[i][j] = cur_board[i][j + 1] + cur_board[i][j];
 					cur_board[i][j + 1] = 0;
-					flag = 1;
+					j++;
 				}
-				j = j + 1;
 			}
 		}
 		break;
 	case 's':
 	case 'S':
 		for (j = 0; j <= size - 1; j++) {
-			i = size - 1;
-			flag = 0;
-			while (i > 0 && flag == 0) {
+			for (i = size - 1; i > 0; i--) {
 				if (cur_board[i][j] == cur_board[i - 1][j] && cur_board[i][j] != 0) {
 					cur_board[i][j] = cur_board[i - 1][j] + cur_board[i][j];
 					cur_board[i - 1][j] = 0;
-					flag = 1;
+					i--;
 				}
-				i = i - 1;
 			}
 		}
 		break;
 	case 'd':
 	case 'D':
 		for (i = 0; i <= size - 1; i++) {
-			j = size - 1;
-			flag = 0;
-			while (j > 0 && flag == 0) {
+			for (j = size - 1; j > 0; j--) {
 				if (cur_board[i][j] == cur_board[i][j - 1] && cur_board[i][j] != 0) {
 					cur_board[i][j - 1] = cur_board[i][j - 1] + cur_board[i][j];
 					cur_board[i][j] = 0;
-					flag = 1;
+					j--;
 				}
-				j = j - 1;
 			}
 		}
 		break;
@@ -253,12 +239,12 @@ void spawnBlock(int **cur_board, int *emptyIndex, int size) {
 
 }
 
-int move(char key, int **cur_board, int **pre_board, int size) { 
+int move(char key, int **cur_board, int **pre_board, int size) {
 	push(cur_board, key, size);
 
 	merge(cur_board, key, size);
 
-	if (checkMove(cur_board, pre_board, size)) { 
+	if (checkMove(cur_board, pre_board, size)) {
 		return 1;
 	}//블록이  전혀 움직이지 않은 경우 1을 반환하고 함수를 종료. 움직이지 않았을때 다시 키를 받도록 한다.
 
