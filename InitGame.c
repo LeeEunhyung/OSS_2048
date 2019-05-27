@@ -68,11 +68,11 @@ void refreshGame() {}
 void undo() {}
 
 
-void save(int **cur_board, int **pre_board, int *cur_score, int *pre_score, int size) {
+void save(int **cur_board, int **pre_board, int *cur_score_p, int *pre_score_p, int size) {
 	int i = 0;
 	int j = 0;
 
-	*pre_score = *cur_score;
+	*pre_score_p = *cur_score_p;
 	for (i = 0; i < size; i++) {
 		for (j = 0; j < size; j++) {
 			pre_board[i][j] = cur_board[i][j];
