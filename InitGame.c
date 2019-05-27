@@ -65,8 +65,15 @@ void findEmpty() {}
 
 void inputKey() {}
 void refreshGame() {}
-void undo() {}
+void undo(int **cur_board, int **pre_board, int size) {
+  int i = 0, j = 0;
 
+  for (i = 0; i < size; i++) {
+    for (j = 0; j < size; j++) {
+      cur_board[i][j] = pre_board[i][j];
+    }
+  }
+} //최근 방향키 움직임을 취소하고 이전의 상태로 복원
 
 void save(int **cur_board, int **pre_board, int *cur_score, int *pre_score, int size) {
 	int i = 0;
@@ -253,14 +260,14 @@ void spawnBlock(int **cur_board, int *emptyIndex, int size) {
 
 }
 
-int move(char key, int **cur_board, int **pre_board, int size) { 
+int move(char key, int **cur_board, int **pre_board, int size) {
 	push(cur_board, key, size);
 
 	merge(cur_board, key, size);
 
-	if (checkMove(cur_board, pre_board, size)) { 
+	if (checkMove(cur_board, pre_board, size)) {
 		return 1;
-	}//블록이  전혀 움직이지 않은 경우 1을 반환하고 함수를 종료. 움직이지 않았을때 다시 키를 받도록 한다.
+	}//블록이 전혀 움직이지 않은 경우 1을 반환하고 함수를 종료. 움직이지 않았을때 다시 키를 받도록 한다.
 
 	push(cur_board, key, size);
 

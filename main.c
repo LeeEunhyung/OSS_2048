@@ -1,4 +1,3 @@
-
 #include <stdio.h>
 #include <time.h>
 #include <stdlib.h>
@@ -366,11 +365,7 @@ int main() {
 			}
 			printf("\nThe current state\n");
 			printf("Score:%d\nHigh Score:%d", pre_score, high_score);
-			for (i = 0; i < size; i++) {
-				for (j = 0; j < size; j++) {
-					cur_board[i][j] = pre_board[i][j];
-				}
-			}
+			undo(cur_board, pre_board, size);
 		}
 		isGameover = 0;
 		for (i = 0; i <= size - 1; i++) {
@@ -431,3 +426,4 @@ int main() {
 	_getch();
 	return 0;
 }
+

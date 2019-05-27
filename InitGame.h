@@ -15,7 +15,7 @@ void findEmpty();
 
 void inputKey();
 void refreshGame();
-void undo();
+void undo(int **cur_board, int **pre_board, int size);
 
 void save(int **cur_board, int **pre_board, int *cur_scroe, int *pre_score, int size);
 
