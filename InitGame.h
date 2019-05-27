@@ -8,6 +8,8 @@ int _getch();
 
 char key;
 
+void clear_window();
+
 int** setUp(int **arr, int size);
 int** allocateArr(int **arr, int size);
 

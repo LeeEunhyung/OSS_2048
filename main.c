@@ -1,19 +1,17 @@
-
 #include <stdio.h>
 #include <time.h>
 #include <stdlib.h>
+#include "InitGame.h"
 
 #ifdef _WIN32
 
-#include "InitGame.h"
 #include <conio.h>
 
 #elif __linux__
 
-#include "InitGame.c" //HACK: gcc 컴파일러에 InitGame.h를 추가하지 못함 -> 함수 정의 부분인 InitGame.c를 바로 링크
 #include <termios.h>
 
-#endif //windowsOS나 linuxOS에 구애받지 않게 하기위해 추가
+#endif //windowsOS나 linuxOS에 구애받지 않게 하기위해 추가, linux는 특정 명령어를 통해 실행(명령어는 README.md에 기술)
 
 /*
 * 저장소 명칭: OSS_2048
@@ -107,7 +105,7 @@ int main() {
 			randomNum = ((rand() % 2) + 1) * 2;
 			cur_board[i][j] = randomNum;
 
-			system("cls");
+			clear_window();
 			for (i = 0; i < size; i++) {
 				for (j = 0; j < size; j++) {
 					if (j == 0)
@@ -166,7 +164,7 @@ int main() {
 			randomNum = ((rand() % 2) + 1) * 2;
 			cur_board[i][j] = randomNum;
 
-			system("CLS");
+			clear_window();
 			for (i = 0; i < size; i++) {
 				for (j = 0; j < size; j++) {
 					if (j == 0)
@@ -223,7 +221,7 @@ int main() {
 			randomNum = ((rand() % 2) + 1) * 2;
 			cur_board[i][j] = randomNum;
 
-			system("CLS");
+			clear_window();
 			for (i = 0; i < size; i++) {
 				for (j = 0; j < size; j++) {
 					if (j == 0)
@@ -283,7 +281,7 @@ int main() {
 			randomNum = ((rand() % 2) + 1) * 2;
 			cur_board[i][j] = randomNum;
 
-			system("CLS");
+			clear_window();
 			for (i = 0; i < size; i++) {
 				for (j = 0; j < size; j++) {
 					if (j == 0)
@@ -322,7 +320,7 @@ int main() {
 					cur_board[i][j] = 0;
 				}
 			}
-			system("CLS");
+			clear_window();
 			for (i = 0; i < size; i++) {
 				for (j = 0; j < size; j++) {
 					if (j == 0)
@@ -345,7 +343,7 @@ int main() {
 			printf("Score:%d\nHigh Score:%d", cur_score, high_score);
 		}
 		if (key == 'r') {
-			system("CLS");
+			clear_window();
 			for (i = 0; i < size; i++) {
 				for (j = 0; j < size; j++) {
 					if (j == 0)
@@ -414,7 +412,7 @@ int main() {
 			key = 'e';
 		}
 	}
-	system("CLS");
+	clear_window();
 	for (i = 0; i < size; i++) {
 		for (j = 0; j < size; j++) {
 			if (j == 0)
@@ -431,3 +429,4 @@ int main() {
 	_getch();
 	return 0;
 }
+

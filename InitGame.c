@@ -6,8 +6,7 @@
 #ifdef __linux__
 
 #include <termios.h>
-int _getch()
-{
+int _getch() {
   int ch;
 
   struct termios buf;
@@ -30,6 +29,14 @@ int _getch()
 }
 
 #endif //_getch가 정의된 conio 라이브러리가 없기 때문에 _getch 함수를 직접 정의
+
+void clear_window() {
+  #ifdef _WIN32
+    system("CLS");
+  #elif __linux__
+    system("clear");
+  #endif
+}
 
 int** allocateArr(int **arr, int size) {
 	int i = 0, j = 0;
@@ -253,12 +260,12 @@ void spawnBlock(int **cur_board, int *emptyIndex, int size) {
 
 }
 
-int move(char key, int **cur_board, int **pre_board, int size) { 
+int move(char key, int **cur_board, int **pre_board, int size) {
 	push(cur_board, key, size);
 
 	merge(cur_board, key, size);
 
-	if (checkMove(cur_board, pre_board, size)) { 
+	if (checkMove(cur_board, pre_board, size)) {
 		return 1;
 	}//블록이  전혀 움직이지 않은 경우 1을 반환하고 함수를 종료. 움직이지 않았을때 다시 키를 받도록 한다.
 
