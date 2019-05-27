@@ -63,10 +63,6 @@ int main() {
 
 	srand((unsigned int)time(NULL));
 
-	pre_score = 0;
-	cur_score = 0;
-	high_score = 0;
-	sum = 0;
 
 	for (i = 0; i < size; i++) {
 		for (j = 0; j < size; j++) {
