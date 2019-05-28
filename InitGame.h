@@ -11,6 +11,9 @@ int _getch();
 #define UP 72
 #define DOWN 80
 
+#define TRUE 1
+#define FALSE 0
+
 #define CURRENT 1
 #define PREVIOUS 0
 //gameboard 종류 define
