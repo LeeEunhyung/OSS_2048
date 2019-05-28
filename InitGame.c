@@ -269,3 +269,18 @@ void updateScore(int **cur_board, int *cur_score, int *high_score, int size) {
 
 }
 
+int isArrowKey(char key) {
+	int output = 0;
+	int lower = 0;
+	int upper = 0;
+	int arrow = 0;
+
+	lower = key == 'w' || key == 'a' || key == 's' || key == 'd';
+	upper = key == 'W' || key == 'A' || key == 'S' || key == 'D';
+	arrow = key == UP || key == LEFT || key == DOWN || key == RIGHT;
+
+	output = lower || upper || arrow;
+
+	return output;
+}/* 입력받은 키가 방향조작키인지 확인하기 위한 함수 키를 받아서 방향키인지 확인 후 논리 값 출력
+ output: 출력할 논리 값 lower: 소문자 논리값 upper: 대문자 논리 값 arrow: 방향키 논리 값*/
