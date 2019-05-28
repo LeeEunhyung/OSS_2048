@@ -64,15 +64,23 @@ int** setUp(int **arr, int size) {
 
 void findEmpty() {}
 
-void refreshGame(int **cur_board, int *cur_score, int size) {
+void refreshGame(int **cur_board, int **pre_board, int size) {
   int i = 0, j = 0;
-  cur_score = 0;
+  int cnt = 0;
+  int random = 0;
 
   for (i = 0; i <= size - 1; i++) {
     for (j = 0; j <= size - 1; j++) {
       cur_board[i][j] = 0;
+      pre_board[i][j] = 0;
     }
   }
+  for (cnt = 0; cnt < 2; cnt++) {
+		i = rand() % size;
+		j = rand() % size;
+		random = ((rand() % 2) + 1) * 2;
+		cur_board[i][j] = random;
+	}
 } //현재 GameBoard를 초기화하고 게임을 재 시작
 void undo(int **cur_board, int **pre_board, int size) {
   int i = 0, j = 0;

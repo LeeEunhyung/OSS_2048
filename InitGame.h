@@ -15,17 +15,17 @@ int _getch();
 #define PREVIOUS 0
 //gameboard 종류 define
 
-#define BLACK 0 
-#define BLUE 1 
-#define GREEN 2 
-#define CYAN 3 
-#define RED 4 
-#define MAGENTA 5 
-#define BROWN 6 
-#define DARKGRAY 8 
-#define LIGHTBLUE 9 
-#define LIGHTRED 12 
-#define YELLOW 14 
+#define BLACK 0
+#define BLUE 1
+#define GREEN 2
+#define CYAN 3
+#define RED 4
+#define MAGENTA 5
+#define BROWN 6
+#define DARKGRAY 8
+#define LIGHTBLUE 9
+#define LIGHTRED 12
+#define YELLOW 14
 #define WHITE 15
 //색상 값 define
 
@@ -36,7 +36,7 @@ int** allocateArr(int **arr, int size);
 
 void findEmpty();
 
-void refreshGame(int **cur_board, int *cur_score, int size);
+void refreshGame(int **cur_board, int **pre_board, int size);
 void undo(int **cur_board, int **pre_board, int size);
 int isGameOver(int **cur_board, int size);
 
