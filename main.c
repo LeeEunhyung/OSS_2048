@@ -35,6 +35,7 @@ int main() {
 	- int pre_score: 이전 점수 저장
 	- int high_score: 게임 중 가장 높은 점수 저장
 	- int *emptyIndex: 랜덤 수(2 or 4) 생성 시 cur_board에서 값이 없는 빈 곳의 위치들을 저장
+	- int isMoved: 이동한 경우 표시하는 변수
 	- int isWin: 게임의 승패 여부
 	- int i, j: 반복문 실행 시 Index
 	*/
@@ -47,6 +48,7 @@ int main() {
 	int high_score = 0;
 	int *emptyIndex = NULL;
 	int isWin = 0;
+	int isMoved = 0;
 	int j = 0;
 	int i = 0;
 
@@ -72,9 +74,12 @@ int main() {
 		if (isArrowKey(key)) {
 			save(cur_board, pre_board, &cur_score, &pre_score, size);
 
-			move(key, cur_board, pre_board, size);
+			isMoved = move(key, cur_board, pre_board, size);
 
-			spawnBlock(cur_board, emptyIndex, size);
+			if (isMoved) {
+				spawnBlock(cur_board, emptyIndex, size);
+			}
+			isMoved = 0;
 
 			system("CLS");
 			printBoard(pre_board, size);
