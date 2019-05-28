@@ -66,17 +66,7 @@ int main() {
 	high_score = 0;
 	sum = 0;
 
-	for (i = 0; i < size; i++) {
-		for (j = 0; j < size; j++) {
-			if (j == 0)
-				printf("|");
-			printf(" %4d   |", cur_board[i][j]);
-		}
-		printf("\n");
-	}
-	printf("\nThe current state\n");
-	printf("Score:%d\nHigh Score=%d", cur_score, high_score);
-	printf("\nPress w to move up,press a to move left,press s to move down,press d to move right,\npress e to finish the game, press x to refresh,press r to restore \n");
+	printBoard(cur_board, size, cur_score, high_score, 1);
 
 	while (key != 'e') {
 		key = _getch();
@@ -108,25 +98,8 @@ int main() {
 			cur_board[i][j] = randomNum;
 
 			system("cls");
-			for (i = 0; i < size; i++) {
-				for (j = 0; j < size; j++) {
-					if (j == 0)
-						printf("|");
-					printf(" %4d   |", pre_board[i][j]);
-				}
-				printf("\n");
-			}
-			printf("\nThe previous state\n");
-			printf("Score:%d\nHigh Score:%d\n", pre_score, high_score);
+			printBoard(pre_board, size, pre_score, high_score, 0);
 
-			for (i = 0; i < size; i++) {
-				for (j = 0; j < size; j++) {
-					if (j == 0)
-						printf("|");
-					printf(" %4d   |", cur_board[i][j]);
-				}
-				printf("\n");
-			}
 			sum = 0;
 			for (i = 0; i < size; i++) {
 				for (j = 0; j < size; j++) {
@@ -137,8 +110,7 @@ int main() {
 			if (cur_score > high_score) {
 				high_score = cur_score;
 			}
-			printf("\nThe current state\n");
-			printf("Score:%d\nHigh Score:%d\n", cur_score, high_score);
+			printBoard(cur_board, size, cur_score, high_score, 1);
 		}
 		if (key == 'a') {
 			pre_score = cur_score;
@@ -167,24 +139,8 @@ int main() {
 			cur_board[i][j] = randomNum;
 
 			system("CLS");
-			for (i = 0; i < size; i++) {
-				for (j = 0; j < size; j++) {
-					if (j == 0)
-						printf("|");
-					printf(" %4d   |", pre_board[i][j]);
-				}
-				printf("\n");
-			}
-			printf("\nThe previous state\n");
-			printf("Score:%d\nHigh Score:%d\n", pre_score, high_score);
-			for (i = 0; i < size; i++) {
-				for (j = 0; j < size; j++) {
-					if (j == 0)
-						printf("|");
-					printf(" %4d   |", cur_board[i][j]);
-				}
-				printf("\n");
-			}
+			printBoard(pre_board, size, pre_score, high_score, 0);
+
 			sum = 0;
 			for (i = 0; i < size; i++) {
 				for (j = 0; j < size; j++) {
@@ -195,8 +151,7 @@ int main() {
 			if (cur_score > high_score) {
 				high_score = cur_score;
 			}
-			printf("\nThe current state\n");
-			printf("Score:%d\nHigh Score:%d", cur_score, high_score);
+			printBoard(cur_board, size, cur_score, high_score, 1);
 		}
 		if (key == 's') {
 			pre_score = cur_score;
@@ -224,24 +179,7 @@ int main() {
 			cur_board[i][j] = randomNum;
 
 			system("CLS");
-			for (i = 0; i < size; i++) {
-				for (j = 0; j < size; j++) {
-					if (j == 0)
-						printf("|");
-					printf(" %4d   |", pre_board[i][j]);
-				}
-				printf("\n");
-			}
-			printf("\nThe previous state\n");
-			printf("Score:%d\nHigh Score:%d\n", pre_score, high_score);
-			for (i = 0; i < size; i++) {
-				for (j = 0; j < size; j++) {
-					if (j == 0)
-						printf("|");
-					printf(" %4d   |", cur_board[i][j]);
-				}
-				printf("\n");
-			}
+			printBoard(pre_board, size, pre_score, high_score, 0);
 
 			sum = 0;
 			for (i = 0; i < size; i++) {
@@ -249,13 +187,11 @@ int main() {
 					sum += cur_board[i][j];
 				}
 			}
-
 			cur_score = sum;
 			if (cur_score > high_score) {
 				high_score = cur_score;
 			}
-			printf("\nThe current state\n");
-			printf("Score:%d\nHigh Score:%d", cur_score, high_score);
+			printBoard(cur_board, size, cur_score, high_score, 1);
 		}
 		if (key == 'w') {
 			pre_score = cur_score;
@@ -284,24 +220,8 @@ int main() {
 			cur_board[i][j] = randomNum;
 
 			system("CLS");
-			for (i = 0; i < size; i++) {
-				for (j = 0; j < size; j++) {
-					if (j == 0)
-						printf("|");
-					printf(" %4d   |", pre_board[i][j]);
-				}
-				printf("\n");
-			}
-			printf("\nThe previous state\n");
-			printf("Score:%d\nHigh Score:%d\n", pre_score, high_score);
-			for (i = 0; i < size; i++) {
-				for (j = 0; j < size; j++) {
-					if (j == 0)
-						printf("|");
-					printf(" %4d   |", cur_board[i][j]);
-				}
-				printf("\n");
-			}
+			printBoard(pre_board, size, pre_score, high_score, 0);
+
 			sum = 0;
 			for (i = 0; i < size; i++) {
 				for (j = 0; j < size; j++) {
@@ -312,8 +232,7 @@ int main() {
 			if (cur_score > high_score) {
 				high_score = cur_score;
 			}
-			printf("\nThe current state\n");
-			printf("Score:%d\nHigh Score=%d", cur_score, high_score);
+			printBoard(cur_board, size, cur_score, high_score, 1);
 		}
 		if (key == 'x') {
 			cur_score = 0;
@@ -323,49 +242,14 @@ int main() {
 				}
 			}
 			system("CLS");
-			for (i = 0; i < size; i++) {
-				for (j = 0; j < size; j++) {
-					if (j == 0)
-						printf("|");
-					printf(" %4d   |", pre_board[i][j]);
-				}
-				printf("\n");
-			}
-			printf("\nThe previous state\n");
-			printf("Score:%d\nHigh Score:%d\n", pre_score, high_score);
-			for (i = 0; i < size; i++) {
-				for (j = 0; j < size; j++) {
-					if (j == 0)
-						printf("|");
-					printf(" %4d   |", cur_board[i][j]);
-				}
-				printf("\n");
-			}
-			printf("\nThe current state\n");
-			printf("Score:%d\nHigh Score:%d", cur_score, high_score);
+			printBoard(pre_board, size, pre_score, high_score, 0);
+			printBoard(cur_board, size, cur_score, high_score, 1);
 		}
 		if (key == 'r') {
 			system("CLS");
-			for (i = 0; i < size; i++) {
-				for (j = 0; j < size; j++) {
-					if (j == 0)
-						printf("|");
-					printf(" %4d   |", cur_board[i][j]);
-				}
-				printf("\n");
-			}
-			printf("\nThe previous state\n");
-			printf("Score:%d\nHigh Score:%d\n", cur_score, high_score);
-			for (i = 0; i < size; i++) {
-				for (j = 0; j < size; j++) {
-					if (j == 0)
-						printf("|");
-					printf(" %4d   |", pre_board[i][j]);
-				}
-				printf("\n");
-			}
-			printf("\nThe current state\n");
-			printf("Score:%d\nHigh Score:%d", pre_score, high_score);
+			printBoard(cur_board, size, cur_score, high_score, 0);
+			printBoard(pre_board, size, pre_score, high_score, 1);
+
 			for (i = 0; i < size; i++) {
 				for (j = 0; j < size; j++) {
 					cur_board[i][j] = pre_board[i][j];
@@ -408,7 +292,6 @@ int main() {
 			}
 			i += 1;
 		}
-		printf("\nPress 8 to move up,press 4 to move left,press move 2 to down,press 6 to move right,\npress e to finish the game,press x to refresh,press r to restore \n");
 		if (isWin == 1) {
 			printf("YOU WON!\n");
 			key = 'e';

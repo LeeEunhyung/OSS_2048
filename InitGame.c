@@ -8,25 +8,25 @@
 #include <termios.h>
 int _getch()
 {
-  int ch;
+	int ch;
 
-  struct termios buf;
-  struct termios save;
+	struct termios buf;
+	struct termios save;
 
-  tcgetattr(0, &save);
-  buf = save;
+	tcgetattr(0, &save);
+	buf = save;
 
-  buf.c_lflag &= ~(ICANON|ECHO);
-  buf.c_cc[VMIN] = 1;
-  buf.c_cc[VTIME] = 0;
+	buf.c_lflag &= ~(ICANON | ECHO);
+	buf.c_cc[VMIN] = 1;
+	buf.c_cc[VTIME] = 0;
 
-  tcsetattr(0, TCSAFLUSH, &buf);
+	tcsetattr(0, TCSAFLUSH, &buf);
 
-  ch = getchar();
+	ch = getchar();
 
-  tcsetattr(0, TCSAFLUSH, &save);
+	tcsetattr(0, TCSAFLUSH, &save);
 
-  return ch;
+	return ch;
 }
 
 #endif //_getch가 정의된 conio 라이브러리가 없기 때문에 _getch 함수를 직접 정의
@@ -227,7 +227,27 @@ int checkMove(int **cur_board, int **pre_board, int size) {
 	return 1;
 }//보드에 변경사항이 있는지 검사하고 변경사항이 있으면 조기리턴한다.
 
-void printBoard(int **cur_board, int **pre_board, int *cur_score, int *pre_score) {}
+void printBoard(int **board, int size, int score, int save_score, int menu) {
+	int i, j;
+
+	for (i = 0; i < size; i++) {
+		for (j = 0; j < size; j++) {
+			if (j == 0)
+				printf("|");
+			printf(" %4d   |", board[i][j]);
+		}
+		printf("\n");
+	}
+	if (menu) {
+		printf("\nThe current state\n");
+		printf("Score: %d\nHigh Score: %d", score, save_score);
+		printf("\nPress w to move up, press a to move left, press s to move down, press d to move right, \npress e to finish the game, press x to refresh, press r to restore \n");
+	}//cur_board 상태 출력
+	else {
+		printf("\nThe previous state\n");
+		printf("Score: %d\nHigh Score: %d\n", score, save_score);
+	}//pre_board 상태 출력
+}//menu 값에 따라 cur_board(menu=1), pre_board(menu=0)의 상태, 점수, 키 안내 출력
 
 void spawnBlock(int **cur_board, int *emptyIndex, int size) {
 
@@ -253,12 +273,12 @@ void spawnBlock(int **cur_board, int *emptyIndex, int size) {
 
 }
 
-int move(char key, int **cur_board, int **pre_board, int size) { 
+int move(char key, int **cur_board, int **pre_board, int size) {
 	push(cur_board, key, size);
 
 	merge(cur_board, key, size);
 
-	if (checkMove(cur_board, pre_board, size)) { 
+	if (checkMove(cur_board, pre_board, size)) {
 		return 1;
 	}//블록이  전혀 움직이지 않은 경우 1을 반환하고 함수를 종료. 움직이지 않았을때 다시 키를 받도록 한다.
 
