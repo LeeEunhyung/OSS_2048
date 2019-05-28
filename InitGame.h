@@ -33,3 +33,4 @@ int move(char key, int **cur_board, int **pre_board, int size);
 
 void updateScore(int **cur_board, int *cur_score, int *high_score, int size);
 
+int isArrowKey(char key);
