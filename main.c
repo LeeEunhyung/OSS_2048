@@ -69,7 +69,7 @@ int main() {
 		key = _getch();
 		srand((unsigned int)time(NULL));
 
-		if (key == 'w' || key == 'a' || key == 's' || key == 'd') {
+		if (isArrowKey(key)) {
 			save(cur_board, pre_board, &cur_score, &pre_score, size);
 
 			move(key, cur_board, pre_board, size);

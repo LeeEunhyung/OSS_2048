@@ -130,6 +130,7 @@ void push(int **cur_board, char key, int size) {
 	switch (key) {
 	case 'w':
 	case 'W':
+	case UP:
 		for (k = 0; k <= size - 2; k++) {
 			for (j = 0; j <= size - 1; j++) {
 				for (i = 0; i < size - 1; i++) {
@@ -144,6 +145,7 @@ void push(int **cur_board, char key, int size) {
 		break;
 	case 'a':
 	case 'A':
+	case LEFT:
 		for (k = 0; k <= size - 2; k++) {
 			for (i = 0; i <= size - 1; i++) {
 				for (j = size - 1; j > 0; j--) {
@@ -158,6 +160,7 @@ void push(int **cur_board, char key, int size) {
 		break;
 	case 's':
 	case 'S':
+	case DOWN:
 		for (k = 0; k <= size - 2; k++) {
 			for (j = 0; j <= size - 1; j++) {
 				for (i = size - 1; i > 0; i--) {
@@ -171,6 +174,7 @@ void push(int **cur_board, char key, int size) {
 		break;
 	case 'd':
 	case 'D':
+	case RIGHT:
 		for (k = 0; k <= size - 2; k++) {
 			for (i = 0; i <= size - 1; i++) {
 				for (j = 0; j < size - 1; j++) {
@@ -193,6 +197,7 @@ void merge(int **cur_board, char key, int size) {
 	switch (key) {
 	case 'w':
 	case 'W':
+	case UP:
 		for (j = 0; j <= size - 1; j++) {
 			for (i = 0; i < size - 1; i++) {
 				if (cur_board[i][j] == cur_board[i + 1][j] && cur_board[i][j] != 0) {
@@ -205,6 +210,7 @@ void merge(int **cur_board, char key, int size) {
 		break;
 	case 'a':
 	case 'A':
+	case LEFT:
 		for (i = 0; i <= size - 1; i++) {
 			for (j = 0; j <= size - 2; j++) {
 				if (cur_board[i][j] == cur_board[i][j + 1] && cur_board[i][j] != 0) {
@@ -217,6 +223,7 @@ void merge(int **cur_board, char key, int size) {
 		break;
 	case 's':
 	case 'S':
+	case DOWN:
 		for (j = 0; j <= size - 1; j++) {
 			for (i = size - 1; i > 0; i--) {
 				if (cur_board[i][j] == cur_board[i - 1][j] && cur_board[i][j] != 0) {
@@ -229,6 +236,7 @@ void merge(int **cur_board, char key, int size) {
 		break;
 	case 'd':
 	case 'D':
+	case RIGHT:
 		for (i = 0; i <= size - 1; i++) {
 			for (j = size - 1; j > 0; j--) {
 				if (cur_board[i][j] == cur_board[i][j - 1] && cur_board[i][j] != 0) {
@@ -380,3 +388,19 @@ void updateScore(int **cur_board, int *cur_score_p, int *high_score_p, int size)
 		*high_score_p = *cur_score_p;
 	}
 }
+
+int isArrowKey(char key) {
+	int output = 0;
+	int lower = 0;
+	int upper = 0;
+	int arrow = 0;
+
+	lower = key == 'w' || key == 'a' || key == 's' || key == 'd';
+	upper = key == 'W' || key == 'A' || key == 'S' || key == 'D';
+	arrow = key == UP || key == LEFT || key == DOWN || key == RIGHT;
+
+	output = lower || upper || arrow;
+
+	return output;
+}// 입력받은 키가 방향조작키인지 확인하기 위한 함수 키를 받아서 방향키인지 확인 후 논리 값 출력
+//output: 출력할 논리 값 lower: 소문자 논리값 upper: 대문자 논리 값 arrow: 방향키 논리 값

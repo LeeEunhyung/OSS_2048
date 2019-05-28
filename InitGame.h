@@ -6,6 +6,11 @@ int _getch();
 
 #endif
 
+#define LEFT 75
+#define RIGHT 77
+#define UP 72
+#define DOWN 80
+
 #define CURRENT 1
 #define PREVIOUS 0
 //gameboard 종류 define
@@ -46,9 +51,13 @@ void spawnBlock(int **cur_board, int *emptyIndex, int size);
 int checkMove(int **cur_board, int **pre_board, int size);
 
 void printBoard(int **board, int size);
+
+void printScore(int **board, int score, int save_score, int menu);
+
 void textcolor(int foreground, int background);
 
 int move(char key, int **cur_board, int **pre_board, int size);
 
 void updateScore(int **cur_board, int *cur_score, int *high_score, int size);
 
+int isArrowKey(char key);
