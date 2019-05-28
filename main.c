@@ -67,7 +67,8 @@ int main() {
 	high_score = 0;
 	sum = 0;
 
-	printBoard(cur_board, size, cur_score, high_score, 1);
+	printBoard(cur_board, size);
+	printScore(cur_board, cur_score, high_score, CURRENT);
 
 	while (key != 'e') {
 		key = _getch();
@@ -99,7 +100,8 @@ int main() {
 			cur_board[i][j] = randomNum;
 
 			system("cls");
-			printBoard(pre_board, size, pre_score, high_score, 0);
+			printBoard(pre_board, size);
+			printScore(pre_board, pre_score, high_score, PREVIOUS);
 
 			sum = 0;
 			for (i = 0; i < size; i++) {
@@ -111,7 +113,8 @@ int main() {
 			if (cur_score > high_score) {
 				high_score = cur_score;
 			}
-			printBoard(cur_board, size, cur_score, high_score, 1);
+			printBoard(cur_board, size);
+			printScore(cur_board, cur_score, high_score, CURRENT);
 		}
 		if (key == 'a') {
 			pre_score = cur_score;
@@ -140,7 +143,8 @@ int main() {
 			cur_board[i][j] = randomNum;
 
 			system("CLS");
-			printBoard(pre_board, size, pre_score, high_score, 0);
+			printBoard(pre_board, size);
+			printScore(pre_board, pre_score, high_score, PREVIOUS);
 
 			sum = 0;
 			for (i = 0; i < size; i++) {
@@ -152,7 +156,8 @@ int main() {
 			if (cur_score > high_score) {
 				high_score = cur_score;
 			}
-			printBoard(cur_board, size, cur_score, high_score, 1);
+			printBoard(cur_board, size);
+			printScore(cur_board, cur_score, high_score, CURRENT);
 		}
 		if (key == 's') {
 			pre_score = cur_score;
@@ -180,7 +185,8 @@ int main() {
 			cur_board[i][j] = randomNum;
 
 			system("CLS");
-			printBoard(pre_board, size, pre_score, high_score, 0);
+			printBoard(pre_board, size);
+			printScore(pre_board, pre_score, high_score, PREVIOUS);
 
 			sum = 0;
 			for (i = 0; i < size; i++) {
@@ -192,7 +198,8 @@ int main() {
 			if (cur_score > high_score) {
 				high_score = cur_score;
 			}
-			printBoard(cur_board, size, cur_score, high_score, 1);
+			printBoard(cur_board, size);
+			printScore(cur_board, cur_score, high_score, CURRENT);
 		}
 		if (key == 'w') {
 			pre_score = cur_score;
@@ -221,7 +228,8 @@ int main() {
 			cur_board[i][j] = randomNum;
 
 			system("CLS");
-			printBoard(pre_board, size, pre_score, high_score, 0);
+			printBoard(pre_board, size);
+			printScore(pre_board, pre_score, high_score, PREVIOUS);
 
 			sum = 0;
 			for (i = 0; i < size; i++) {
@@ -233,7 +241,8 @@ int main() {
 			if (cur_score > high_score) {
 				high_score = cur_score;
 			}
-			printBoard(cur_board, size, cur_score, high_score, 1);
+			printBoard(cur_board, size);
+			printScore(cur_board, cur_score, high_score, CURRENT);
 		}
 		if (key == 'x') {
 			cur_score = 0;
@@ -243,13 +252,19 @@ int main() {
 				}
 			}
 			system("CLS");
-			printBoard(pre_board, size, pre_score, high_score, 0);
-			printBoard(cur_board, size, cur_score, high_score, 1);
+			printBoard(pre_board, size);
+			printScore(pre_board, pre_score, high_score, PREVIOUS);
+
+			printBoard(cur_board, size);
+			printScore(cur_board, cur_score, high_score, CURRENT);
 		}
 		if (key == 'r') {
 			system("CLS");
-			printBoard(cur_board, size, cur_score, high_score, 0);
-			printBoard(pre_board, size, pre_score, high_score, 1);
+			printBoard(cur_board, size);
+			printScore(cur_board, cur_score, high_score, PREVIOUS);
+
+			printBoard(pre_board, size);
+			printScore(pre_board, pre_score, high_score, CURRENT);
 
 			for (i = 0; i < size; i++) {
 				for (j = 0; j < size; j++) {
@@ -299,14 +314,7 @@ int main() {
 		}
 	}
 	system("CLS");
-	for (i = 0; i < size; i++) {
-		for (j = 0; j < size; j++) {
-			if (j == 0)
-				printf("|");
-			printf(" %4d   |", cur_board[i][j]);
-		}
-		printf("\n");
-	}
+	printBoard(cur_board, size);
 	printf("\nThe current state\n");
 	if (isWin != 1) {
 		printf("\nYOU LOSE!");
