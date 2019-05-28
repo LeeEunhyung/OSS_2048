@@ -80,6 +80,7 @@ void undo(int **cur_board, int **pre_board, int size) {
   for (i = 0; i < size; i++) {
     for (j = 0; j < size; j++) {
       cur_board[i][j] = pre_board[i][j];
+      pre_board[i][j] = 0;
     }
   }
 } //최근 방향키 움직임을 취소하고 이전의 상태로 복원
