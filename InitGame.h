@@ -28,6 +28,7 @@ void spawnBlock(int **cur_board, int *emptyIndex, int size);
 int checkMove(int **cur_board, int **pre_board, int size);
 
 void printBoard(int **board, int size, int score, int save_score, int menu);
+void textcolor(int foreground, int background);
 
 int move(char key, int **cur_board, int **pre_board, int size);
 

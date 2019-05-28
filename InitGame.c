@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <Windows.h>
 
 #ifdef __linux__
 
@@ -232,22 +233,62 @@ void printBoard(int **board, int size, int score, int save_score, int menu) {
 
 	for (i = 0; i < size; i++) {
 		for (j = 0; j < size; j++) {
-			if (j == 0)
-				printf("|");
-			printf(" %4d   |", board[i][j]);
+			switch (board[i][j])
+			{
+			case 2:
+				textcolor(15, 4);
+				break;
+			case 4:
+				textcolor(15, 1);
+				break;
+			case 8:
+				textcolor(15, 2);
+				break;
+			case 16:
+				textcolor(0, 14);
+				break;
+			case 32:
+				textcolor(0, 15);
+				break;
+			case 64:
+				textcolor(15, 6);
+				break;
+			case 128:
+				textcolor(15, 5);
+				break;
+			case 256:
+				textcolor(0, 3);
+				break;
+			default:
+				break;
+			}//숫자에 따라 색 설정
+			if (board[i][j]) {
+				printf("| %4d    |", board[i][j]);
+			}
+			else {
+				printf("|         |");
+			}
+			textcolor(15, 0);
 		}
 		printf("\n");
 	}
-	if (menu) {
-		printf("\nThe current state\n");
-		printf("Score: %d\nHigh Score: %d", score, save_score);
-		printf("\nPress w to move up, press a to move left, press s to move down, press d to move right, \npress e to finish the game, press x to refresh, press r to restore \n");
+	if (menu == 1) {
+		printf("\n☆ The current state ☆\n");
+		printf("   Score: %d\n   High Score: %d", score, save_score);
+		printf("\n   => Press w: up / Press a:left / Press s: down / Press d: right\n");
+		printf("   => Press e : finish the game / Press x : refresh / Press r : restore\n");
 	}//cur_board 상태 출력
 	else {
-		printf("\nThe previous state\n");
-		printf("Score: %d\nHigh Score: %d\n", score, save_score);
+		printf("\n★ The previous state ★\n");
+		printf("   Score: %d\n   High Score: %d\n\n", score, save_score);
 	}//pre_board 상태 출력
 }//menu 값에 따라 cur_board(menu=1), pre_board(menu=0)의 상태, 점수, 키 안내 출력
+
+void textcolor(int foreground, int background)
+{
+	int color = foreground + background * 16;
+	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), color);
+}//글자 배경색 변경
 
 void spawnBlock(int **cur_board, int *emptyIndex, int size) {
 
