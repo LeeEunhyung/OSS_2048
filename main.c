@@ -1,4 +1,3 @@
-
 #include <stdio.h>
 #include <time.h>
 #include <stdlib.h>
@@ -27,7 +26,6 @@
 */
 
 int main() {
-
 	/*
 	- int **cur_board: 현재 gameboard 나타내는 2차원 배열
 	- int **pre_board: 이전(한 타임 전) gameboard 나타내는 2차원 배열
@@ -51,6 +49,8 @@ int main() {
 	int isGameover = 0, isWin;
 	int emptyTile = 1, randomNum, randomIndex = 0;
 	int i, j, k, flag = 0;
+
+	system("mode con lines=20 cols=90");
 
 	printf("Enter the desired game board size: ");
 	scanf("%d", &size);
