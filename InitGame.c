@@ -6,9 +6,9 @@
 #ifdef __linux__
 
 #include <termios.h>
-int _getch()
-{
-	int ch;
+
+int _getch() {
+  	int ch;
 
 	struct termios buf;
 	struct termios save;
@@ -63,10 +63,51 @@ int** setUp(int **arr, int size) {
 
 void findEmpty() {}
 
-void inputKey() {}
-void refreshGame() {}
-void undo() {}
+void refreshGame(int **cur_board, int *cur_score, int size) {
+  int i = 0, j = 0;
+  cur_score = 0;
 
+  for (i = 0; i <= size - 1; i++) {
+    for (j = 0; j <= size - 1; j++) {
+      cur_board[i][j] = 0;
+    }
+  }
+} //현재 GameBoard를 초기화하고 게임을 재 시작
+void undo(int **cur_board, int **pre_board, int size) {
+  int i = 0, j = 0;
+
+  for (i = 0; i < size; i++) {
+    for (j = 0; j < size; j++) {
+      cur_board[i][j] = pre_board[i][j];
+    }
+  }
+} //최근 방향키 움직임을 취소하고 이전의 상태로 복원
+int isGameOver(int **cur_board, int size) {
+  int i = 0, j = 0;
+
+  for (i = 0; i <= size - 1; i++) {
+    for (j = 0; j <= size - 1; j++) {
+      if (cur_board[i][j] == 0) {
+        return 0;
+      }
+    }
+  }
+  for (i = 0; i <= size - 2; i++) {
+    for (j = 0; j <= size - 2; j++) {
+      if (i == size - 1 && j != size - 1 && cur_board[i][j] == cur_board[i][j + 1]) {
+        return 0;
+      }
+      if (j == size - 1 && i != size - 1 && cur_board[i][j] == cur_board[i + 1][j]) {
+        return 0;
+      }
+      if (cur_board[i][j] == cur_board[i + 1][j] || cur_board[i][j] == cur_board[i][j + 1]) {
+        return 0;
+      }
+    }
+  }
+
+  return 1;
+} //반환값이 1이면 게임 오버되어 키 입력 불가
 
 void save(int **cur_board, int **pre_board, int *cur_score_p, int *pre_score_p, int size) {
 	int i = 0;
@@ -272,7 +313,7 @@ int move(char key, int **cur_board, int **pre_board, int size) {
 
 	if (checkMove(cur_board, pre_board, size)) {
 		return 1;
-	}//블록이  전혀 움직이지 않은 경우 1을 반환하고 함수를 종료. 움직이지 않았을때 다시 키를 받도록 한다.
+	}//블록이 전혀 움직이지 않은 경우 1을 반환하고 함수를 종료. 움직이지 않았을때 다시 키를 받도록 한다.
 
 	push(cur_board, key, size);
 

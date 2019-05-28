@@ -1,4 +1,3 @@
-
 #include <stdio.h>
 #include <time.h>
 #include <stdlib.h>
@@ -37,7 +36,6 @@ int main() {
 	- int pre_score: 이전 점수 저장
 	- int high_score: 게임 중 가장 높은 점수 저장
 	- int *emptyIndex: 랜덤 수(2 or 4) 생성 시 cur_board에서 값이 없는 빈 곳의 위치들을 저장
-	- int isGameover: 게임 종료 여부 저장
 	- int isWin: 게임의 승패 여부
 	- int i, j: 반복문 실행 시 Index
 	*/
@@ -49,7 +47,6 @@ int main() {
 	int pre_score = 0;
 	int high_score = 0;
 	int *emptyIndex = NULL;
-	int isGameover = 0;
 	int isWin = 0;
 	int j = 0;
 	int i = 0;
@@ -90,12 +87,8 @@ int main() {
 			printBoard(cur_board, pre_board, &cur_score, &pre_score, &high_score, size);
 		}
 		if (key == 'x') {
-			cur_score = 0;
-			for (i = 0; i <= size - 1; i++) {
-				for (j = 0; j <= size - 1; j++) {
-					cur_board[i][j] = 0;
-				}
-			}
+			refreshGame(cur_board, &cur_score, size);
+
 			system("CLS");
 			for (i = 0; i < size; i++) {
 				for (j = 0; j < size; j++) {
@@ -140,36 +133,15 @@ int main() {
 			}
 			printf("\nThe current state\n");
 			printf("Score:%d\nHigh Score:%d", pre_score, high_score);
-			for (i = 0; i < size; i++) {
-				for (j = 0; j < size; j++) {
-					cur_board[i][j] = pre_board[i][j];
-				}
-			}
+
+			undo(cur_board, pre_board, size);
 		}
-		isGameover = 0;
-		for (i = 0; i <= size - 1; i++) {
-			for (j = 0; j <= size - 1; j++) {
-				if (cur_board[i][j] == 0) {
-					isGameover = 1;
-				}
-			}
+
+		if(isGameOver(cur_board, size) == 1)
+		{
+			break;
 		}
-		for (i = 0; i <= size - 2; i++) {
-			for (j = 0; j <= size - 2; j++) {
-				if (i == size - 1 && j != size - 1 && cur_board[i][j] == cur_board[i][j + 1]) {
-					isGameover = 1;
-				}
-				if (j == size - 1 && i != size - 1 && cur_board[i][j] == cur_board[i + 1][j]) {
-					isGameover = 1;
-				}
-				if (cur_board[i][j] == cur_board[i + 1][j] || cur_board[i][j] == cur_board[i][j + 1]) {
-					isGameover = 1;
-				}
-			}
-		}
-		if (isGameover != 1) {
-			key = 'e';
-		}
+
 		i = 1;
 		j = 1;
 		isWin = 0;
@@ -205,3 +177,4 @@ int main() {
 	_getch();
 	return 0;
 }
+
