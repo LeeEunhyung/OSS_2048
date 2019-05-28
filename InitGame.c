@@ -3,9 +3,14 @@
 #include <stdlib.h>
 #include <string.h>
 
-#ifdef __linux__
+#ifdef _WIN32
+
+void printBoard(int **board, int size, int score, int save_score, int menu) {}
+
+#elif __linux__
 
 #include <termios.h>
+
 int _getch() {
   int ch;
 
@@ -28,15 +33,81 @@ int _getch() {
   return ch;
 }
 
-#endif //_getch가 정의된 conio 라이브러리가 없기 때문에 _getch 함수를 직접 정의
+void printBoard(int **board, int size, int score, int save_score, int menu) {
+	int i, j;
+	char *foreground = "\0";
+	char *background = "\0";
 
-void clear_window() {
-  #ifdef _WIN32
-    system("CLS");
-  #elif __linux__
-    system("clear");
-  #endif
-}
+	for (i = 0; i < size; i++) {
+		for (j = 0; j < size; j++) {
+			switch (board[i][j])
+			{
+			case 2:
+			 	foreground = "[37m";
+				background = "[41m";
+				break;
+			case 4:
+				foreground = "[37m";
+				background = "[44m";
+				break;
+			case 8:
+				foreground = "[37m";
+				background = "[42m";
+				break;
+			case 16:
+				foreground = "[30m";
+				background = "[43m";
+				break;
+			case 32:
+				foreground = "[30m";
+				background = "[47m";
+				break;
+			case 64:
+				foreground = "[37m";
+				background = "[40m";
+				break;
+			case 128:
+				foreground = "[37m";
+				background = "[45m";
+				break;
+			case 256:
+				foreground = "[30m";
+				background = "[46m";
+				break;
+			default:
+				break;
+			}//숫자에 따라 색 설정
+			if (board[i][j]) {
+				printf("\033%s\033%s", foreground, background);
+				printf("| %4d    |", board[i][j]);
+				if(i == size - 1 && j == size - 1) {
+					printf("\033[0m");
+					printf(" ");
+				}
+			}
+			else {
+				printf("\033[0m");
+				printf("|         |");
+			}
+
+		}
+		printf("\033[0m");
+		printf("\n");
+	}
+
+	if (menu == 1) {
+		printf("\n☆ The current state ☆\n");
+		printf("   Score: %d\n   High Score: %d", score, save_score);
+		printf("\n   => Press w: up / Press a:left / Press s: down / Press d: right\n");
+		printf("   => Press e : finish the game / Press x : refresh / Press r : restore\n");
+	}//cur_board 상태 출력
+	else {
+		printf("\n★ The previous state ★\n");
+		printf("   Score: %d\n   High Score: %d\n\n", score, save_score);
+	}//pre_board 상태 출력
+}//menu 값에 따라 cur_board(menu=1), pre_board(menu=0)의 상태, 점수, 키 안내 출력
+
+#endif //각 OS 환경에 따른 필요 함수를 각각 정의
 
 int** allocateArr(int **arr, int size) {
 	int i = 0, j = 0;
@@ -233,8 +304,6 @@ int checkMove(int **cur_board, int **pre_board, int size) {
 	}
 	return 1;
 }//보드에 변경사항이 있는지 검사하고 변경사항이 있으면 조기리턴한다.
-
-void printBoard(int **cur_board, int **pre_board, int *cur_score, int *pre_score) {}
 
 void spawnBlock(int **cur_board, int *emptyIndex, int size) {
 
