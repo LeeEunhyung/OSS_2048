@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <Windows.h>
 
 #ifdef __linux__
 
@@ -254,33 +255,78 @@ int checkMove(int **cur_board, int **pre_board, int size) {
 	return 1;
 }//보드에 변경사항이 있는지 검사하고 변경사항이 있으면 조기리턴한다.
 
-void printBoard(int **cur_board, int **pre_board, int *cur_score_p, int *pre_score_p, int *high_score_p, int size) {
-	int i = 0;
-	int j = 0;
+void textcolor(int foreground, int background) {
+	int color = foreground + background * 16;
+	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), color);
+}//글자 배경색 변경
 
-	system("CLS");
+void printScore(int **board, int score, int save_score, int menu) {
+	if (menu == CURRENT) {
+		printf("\n☆ The current state ☆\n");
+		printf("   Score: %d\n   High Score: %d", score, save_score);
+		printf("\n   => Press w: up / Press a:left / Press s: down / Press d: right\n");
+		printf("   => Press e : finish the game / Press x : refresh / Press r : restore\n");
+	}
+	else if (menu == PREVIOUS) {
+		printf("\n★ The previous state ★\n");
+		printf("   Score: %d\n   High Score: %d\n\n", score, save_score);
+	}
+}//menu(CURRENT, PREVIOUS)에 따라 점수 상태, 키 안내 출력
+
+void printBoard(int **board, int size) {
+	int i, j;
+
 	for (i = 0; i < size; i++) {
 		for (j = 0; j < size; j++) {
-			if (j == 0)
-				printf("|");
-			printf(" %4d   |", pre_board[i][j]);
+			switch (board[i][j])
+			{
+			case 2:
+				textcolor(WHITE, RED);
+				break;
+			case 4:
+				textcolor(WHITE, BLUE);
+				break;
+			case 8:
+				textcolor(WHITE, GREEN);
+				break;
+			case 16:
+				textcolor(BLACK, YELLOW);
+				break;
+			case 32:
+				textcolor(BLACK, WHITE);
+				break;
+			case 64:
+				textcolor(WHITE, BROWN);
+				break;
+			case 128:
+				textcolor(WHITE, MAGENTA);
+				break;
+			case 256:
+				textcolor(BLACK, CYAN);
+				break;
+			case 512:
+				textcolor(WHITE, DARKGRAY);
+				break;
+			case 1024:
+				textcolor(WHITE, LIGHTBLUE);
+				break;
+			case 2048:
+				textcolor(WHITE, LIGHTRED);
+				break;
+			default:
+				break;
+			}//숫자에 따라 타일 색 설정
+			if (board[i][j]) {
+				printf("| %4d    |", board[i][j]);
+			}
+			else {
+				printf("|         |");
+			}
+			textcolor(15, 0);
 		}
 		printf("\n");
 	}
-	printf("\nThe previous state\n");
-	printf("Score:%d\nHigh Score:%d\n", *pre_score_p, *high_score_p);
-	for (i = 0; i < size; i++) {
-		for (j = 0; j < size; j++) {
-			if (j == 0)
-				printf("|");
-			printf(" %4d   |", cur_board[i][j]);
-		}
-		printf("\n");
-	}
-	updateScore(cur_board, cur_score_p, high_score_p, size);
-	printf("\nThe current state\n");
-	printf("Score:%d\nHigh Score:%d", *cur_score_p, *high_score_p);
-}
+}//숫자마다 색을 구분하여 gameboard 상태를 출력
 
 void spawnBlock(int **cur_board, int *emptyIndex, int size) {
 
@@ -334,4 +380,3 @@ void updateScore(int **cur_board, int *cur_score_p, int *high_score_p, int size)
 		*high_score_p = *cur_score_p;
 	}
 }
-

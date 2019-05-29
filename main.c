@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <time.h>
 #include <stdlib.h>
+#include <Windows.h>
 
 #ifdef _WIN32
 
@@ -26,8 +27,6 @@
 */
 
 int main() {
-
-
 	/*
 	- int **cur_board: 현재 gameboard 나타내는 2차원 배열
 	- int **pre_board: 이전(한 타임 전) gameboard 나타내는 2차원 배열
@@ -51,6 +50,8 @@ int main() {
 	int j = 0;
 	int i = 0;
 
+	system("mode con lines=20 cols=90");
+
 	printf("Enter the desired game board size: ");
 	scanf("%d", &size);
 
@@ -61,17 +62,8 @@ int main() {
 	srand((unsigned int)time(NULL));
 
 
-	for (i = 0; i < size; i++) {
-		for (j = 0; j < size; j++) {
-			if (j == 0)
-				printf("|");
-			printf(" %4d   |", cur_board[i][j]);
-		}
-		printf("\n");
-	}
-	printf("\nThe current state\n");
-	printf("Score:%d\nHigh Score=%d", cur_score, high_score);
-	printf("\nPress w to move up,press a to move left,press s to move down,press d to move right,\npress e to finish the game, press x to refresh,press r to restore \n");
+	printBoard(cur_board, size);
+	printScore(cur_board, cur_score, high_score, CURRENT);
 
 	while (key != 'e') {
 		key = _getch();
@@ -84,61 +76,37 @@ int main() {
 
 			spawnBlock(cur_board, emptyIndex, size);
 
-			printBoard(cur_board, pre_board, &cur_score, &pre_score, &high_score, size);
+			system("CLS");
+			printBoard(pre_board, size);
+			printScore(pre_board, pre_score, high_score, PREVIOUS);
+
+			updateScore(cur_board, &cur_score, &high_score, size);
+
+			printBoard(cur_board, size);
+			printScore(cur_board, cur_score, high_score, CURRENT);
 		}
 		if (key == 'x') {
 			refreshGame(cur_board, &cur_score, size);
 
 			system("CLS");
-			for (i = 0; i < size; i++) {
-				for (j = 0; j < size; j++) {
-					if (j == 0)
-						printf("|");
-					printf(" %4d   |", pre_board[i][j]);
-				}
-				printf("\n");
-			}
-			printf("\nThe previous state\n");
-			printf("Score:%d\nHigh Score:%d\n", pre_score, high_score);
-			for (i = 0; i < size; i++) {
-				for (j = 0; j < size; j++) {
-					if (j == 0)
-						printf("|");
-					printf(" %4d   |", cur_board[i][j]);
-				}
-				printf("\n");
-			}
-			printf("\nThe current state\n");
-			printf("Score:%d\nHigh Score:%d", cur_score, high_score);
+			printBoard(pre_board, size);
+			printScore(pre_board, pre_score, high_score, PREVIOUS);
+
+			printBoard(cur_board, size);
+			printScore(cur_board, cur_score, high_score, CURRENT);
 		}
 		if (key == 'r') {
 			system("CLS");
-			for (i = 0; i < size; i++) {
-				for (j = 0; j < size; j++) {
-					if (j == 0)
-						printf("|");
-					printf(" %4d   |", cur_board[i][j]);
-				}
-				printf("\n");
-			}
-			printf("\nThe previous state\n");
-			printf("Score:%d\nHigh Score:%d\n", cur_score, high_score);
-			for (i = 0; i < size; i++) {
-				for (j = 0; j < size; j++) {
-					if (j == 0)
-						printf("|");
-					printf(" %4d   |", pre_board[i][j]);
-				}
-				printf("\n");
-			}
-			printf("\nThe current state\n");
-			printf("Score:%d\nHigh Score:%d", pre_score, high_score);
+
+			printBoard(cur_board, size);
+			printScore(cur_board, cur_score, high_score, PREVIOUS);
+
+			printBoard(pre_board, size);
+			printScore(pre_board, pre_score, high_score, CURRENT);
 
 			undo(cur_board, pre_board, size);
 		}
-
-		if(isGameOver(cur_board, size) == 1)
-		{
+		if(isGameOver(cur_board, size) == 1) {
 			break;
 		}
 
@@ -154,21 +122,13 @@ int main() {
 			}
 			i += 1;
 		}
-		printf("\nPress 8 to move up,press 4 to move left,press move 2 to down,press 6 to move right,\npress e to finish the game,press x to refresh,press r to restore \n");
 		if (isWin == 1) {
 			printf("YOU WON!\n");
 			key = 'e';
 		}
 	}
 	system("CLS");
-	for (i = 0; i < size; i++) {
-		for (j = 0; j < size; j++) {
-			if (j == 0)
-				printf("|");
-			printf(" %4d   |", cur_board[i][j]);
-		}
-		printf("\n");
-	}
+	printBoard(cur_board, size);
 	printf("\nThe current state\n");
 	if (isWin != 1) {
 		printf("\nYOU LOSE!");
