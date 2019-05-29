@@ -4,21 +4,29 @@
 
 #ifdef __linux__
 
-#define ARROW 27
 int _getch();
+
+#define ARROW 27
+
+#define LEFT 'D'
+#define RIGHT 'C'
+#define UP 'A'
+#define DOWN 'B'
 
 #elif _WIN32
 
-#define ARROW -32
 void textcolor(int foreground, int background);
 
-#endif
-
+#define ARROW -32
 
 #define LEFT 75
 #define RIGHT 77
 #define UP 72
 #define DOWN 80
+
+#endif
+
+#define SECOND_ARROW 91
 
 #define TRUE 1
 #define FALSE 0

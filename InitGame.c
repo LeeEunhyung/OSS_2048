@@ -297,7 +297,6 @@ void push(int **cur_board, char key, int size) {
 	switch (key) {
 	case 'w':
 	case 'W':
-	case UP:
 		for (k = 0; k <= size - 2; k++) {
 			for (j = 0; j <= size - 1; j++) {
 				for (i = 0; i < size - 1; i++) {
@@ -312,7 +311,6 @@ void push(int **cur_board, char key, int size) {
 		break;
 	case 'a':
 	case 'A':
-	case LEFT:
 		for (k = 0; k <= size - 2; k++) {
 			for (i = 0; i <= size - 1; i++) {
 				for (j = size - 1; j > 0; j--) {
@@ -327,7 +325,6 @@ void push(int **cur_board, char key, int size) {
 		break;
 	case 's':
 	case 'S':
-	case DOWN:
 		for (k = 0; k <= size - 2; k++) {
 			for (j = 0; j <= size - 1; j++) {
 				for (i = size - 1; i > 0; i--) {
@@ -341,7 +338,6 @@ void push(int **cur_board, char key, int size) {
 		break;
 	case 'd':
 	case 'D':
-	case RIGHT:
 		for (k = 0; k <= size - 2; k++) {
 			for (i = 0; i <= size - 1; i++) {
 				for (j = 0; j < size - 1; j++) {
@@ -364,7 +360,6 @@ void merge(int **cur_board, char key, int size) {
 	switch (key) {
 	case 'w':
 	case 'W':
-	case UP:
 		for (j = 0; j <= size - 1; j++) {
 			for (i = 0; i < size - 1; i++) {
 				if (cur_board[i][j] == cur_board[i + 1][j] && cur_board[i][j] != 0) {
@@ -377,7 +372,6 @@ void merge(int **cur_board, char key, int size) {
 		break;
 	case 'a':
 	case 'A':
-	case LEFT:
 		for (i = 0; i <= size - 1; i++) {
 			for (j = 0; j <= size - 2; j++) {
 				if (cur_board[i][j] == cur_board[i][j + 1] && cur_board[i][j] != 0) {
@@ -390,7 +384,6 @@ void merge(int **cur_board, char key, int size) {
 		break;
 	case 's':
 	case 'S':
-	case DOWN:
 		for (j = 0; j <= size - 1; j++) {
 			for (i = size - 1; i > 0; i--) {
 				if (cur_board[i][j] == cur_board[i - 1][j] && cur_board[i][j] != 0) {
@@ -403,7 +396,6 @@ void merge(int **cur_board, char key, int size) {
 		break;
 	case 'd':
 	case 'D':
-	case RIGHT:
 		for (i = 0; i <= size - 1; i++) {
 			for (j = size - 1; j > 0; j--) {
 				if (cur_board[i][j] == cur_board[i][j - 1] && cur_board[i][j] != 0) {
@@ -470,8 +462,28 @@ void spawnBlock(int **cur_board, int *emptyIndex, int size) {
 int move(char key, int **cur_board, int **pre_board, int size) {
 	if (key == ARROW) {
 		key = _getch();
-	}
 
+		if (key == SECOND_ARROW) {
+			key = _getch();
+		}// 리눅스는 특별히 3바이트로 된 방향키를 가짐.
+
+		switch (key) {
+		case UP:
+			key = 'w';
+			break;
+		case DOWN:
+			key = 's';
+			break;
+		case LEFT:
+			key = 'a';
+			break;
+		case RIGHT:
+			key = 'd';
+			break;
+		}
+
+	}//방향키를 받으면 2~3 바이트로 되어있기 때문에 마지막 char만 쓸 수 있으므로 앞을 char를 제거하는 조건문 
+	
 	push(cur_board, key, size);
 
 	merge(cur_board, key, size);
