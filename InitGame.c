@@ -238,22 +238,24 @@ void undo(int **cur_board, int **pre_board, int size) {
 int isGameOver(int **cur_board, int size) {
 	int i = 0, j = 0;
 
-	for (i = 0; i <= size - 1; i++) {
-		for (j = 0; j <= size - 1; j++) {
-			if (cur_board[i][j] == 0) {
+	for (i = 0; i < size; i++) {
+		for (j = 0; j < size; j++) {
+			if(cur_board[i][j] == 0) {
 				return 0;
 			}
 		}
 	}
-	for (i = 0; i <= size - 2; i++) {
-		for (j = 0; j <= size - 2; j++) {
-			if (i == size - 1 && j != size - 1 && cur_board[i][j] == cur_board[i][j + 1]) {
+
+	for (i = 0; i < size; i++) {
+		for (j = 0; j < size - 1; j++) {
+			if(cur_board[i][j] == cur_board[i][j + 1]) {
 				return 0;
 			}
-			if (j == size - 1 && i != size - 1 && cur_board[i][j] == cur_board[i + 1][j]) {
-				return 0;
-			}
-			if (cur_board[i][j] == cur_board[i + 1][j] || cur_board[i][j] == cur_board[i][j + 1]) {
+		}
+	}
+	for (i = 0; i < size - 1; i++) {
+		for (j = 0; j < size; j++) {
+			if(cur_board[i][j] == cur_board[i + 1][j]) {
 				return 0;
 			}
 		}
@@ -514,7 +516,7 @@ int isWin(int **board, int size) {
 	return win;
 }//게임 승패 여부 판단
 
-void isWinPrint(int board, int score, int high_score, int size, int win_result) {
+void isWinPrint(int **board, int score, int high_score, int size, int win_result) {
 	printBoard(board, size);
 	printf("\n\n>> GAME OVER! <<\n\n");
 
