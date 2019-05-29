@@ -1,4 +1,6 @@
-#pragma once
+#ifndef _INITGAME_H_
+
+#define _INITGAME_H_
 
 #ifdef __linux__
 
@@ -72,4 +74,6 @@ int isArrowKey(char key);
 
 int isWin(int **board, int size);
 void isWinPrint(int **board, int score, int high_score, int size, int win_result);
+
+#endif
 
