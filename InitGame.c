@@ -103,36 +103,48 @@ void printBoard(int **board, int size) {
 			switch (board[i][j])
 			{
 			case 2:
-				foreground = "[37m";
-				background = "[41m";
+			 	foreground = F_WHITE;
+				background = B_RED;
 				break;
 			case 4:
-				foreground = "[37m";
-				background = "[44m";
+				foreground = F_WHITE;
+				background = B_BLUE;
 				break;
 			case 8:
-				foreground = "[37m";
-				background = "[42m";
+				foreground = F_WHITE;
+				background = B_GREEN;
 				break;
 			case 16:
-				foreground = "[30m";
-				background = "[43m";
+				foreground = F_BLACK;
+				background = B_YELLOW;
 				break;
 			case 32:
-				foreground = "[30m";
-				background = "[47m";
+				foreground = F_BLACK;
+				background = B_WHITE;
 				break;
 			case 64:
-				foreground = "[37m";
-				background = "[40m";
+				foreground = F_WHITE;
+				background = B_BLACK;
 				break;
 			case 128:
-				foreground = "[37m";
-				background = "[45m";
+				foreground = F_WHITE;
+				background = B_PURPLE;
 				break;
 			case 256:
-				foreground = "[30m";
-				background = "[46m";
+				foreground = F_BLACK;
+				background = B_CYAN;
+				break;
+			case 512:
+				foreground = F_BLACK;
+				background = B_GREEN;
+				break;
+			case 1024:
+				foreground = F_BLACK;
+				background = B_BLUE;
+				break;
+			case 2048:
+				foreground = F_RED;
+				background = B_YELLOW;
 				break;
 			default:
 				break;
@@ -149,7 +161,6 @@ void printBoard(int **board, int size) {
 				printf("\033[0m");
 				printf("|         |");
 			}
-
 		}
 		printf("\033[0m");
 		printf("\n");
