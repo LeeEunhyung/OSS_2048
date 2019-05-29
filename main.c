@@ -1,19 +1,18 @@
+#include "InitGame.h"
 #include <stdio.h>
 #include <time.h>
 #include <stdlib.h>
-#include <Windows.h>
 
 #ifdef _WIN32
 
-#include "InitGame.h"
 #include <conio.h>
+#include <Windows.h>
 
 #elif __linux__
 
-#include "InitGame.c" //HACK: gcc 컴파일러에 InitGame.h를 추가하지 못함 -> 함수 정의 부분인 InitGame.c를 바로 링크
 #include <termios.h>
 
-#endif //windowsOS나 linuxOS에 구애받지 않게 하기위해 추가
+#endif //windowsOS나 linuxOS에 구애받지 않게 하기위해 추가, linux는 특정 명령어를 통해 실행(명령어는 README.md에 기술)
 
 /*
 * 저장소 명칭: OSS_2048
@@ -50,8 +49,6 @@ int main() {
 	int j = 0;
 	int i = 0;
 
-	system("mode con lines=20 cols=90");
-
 	printf("Enter the desired game board size: ");
 	scanf("%d", &size);
 
@@ -60,7 +57,6 @@ int main() {
 	emptyIndex = (int *)malloc(sizeof(int)*(size*size));
 
 	srand((unsigned int)time(NULL));
-
 
 	printBoard(cur_board, size);
 	printScore(cur_board, cur_score, high_score, CURRENT);
@@ -86,7 +82,7 @@ int main() {
 			printScore(cur_board, cur_score, high_score, CURRENT);
 		}
 		if (key == 'x') {
-			refreshGame(cur_board, &cur_score, size);
+			refreshGame(cur_board, &cur_score, size);	
 
 			system("CLS");
 			printBoard(pre_board, size);
@@ -96,15 +92,18 @@ int main() {
 			printScore(cur_board, cur_score, high_score, CURRENT);
 		}
 		if (key == 'r') {
+			undo(cur_board, pre_board, size);
+			if (cur_score > high_score) {
+				high_score = cur_score;
+			}
+
 			system("CLS");
 
-			printBoard(cur_board, size);
-			printScore(cur_board, cur_score, high_score, PREVIOUS);
-
 			printBoard(pre_board, size);
-			printScore(pre_board, pre_score, high_score, CURRENT);
+			printScore(pre_board, pre_score, high_score, PREVIOUS);
 
-			undo(cur_board, pre_board, size);
+			printBoard(cur_board, size);
+			printScore(cur_board, cur_score, high_score, CURRENT);
 		}
 		if(isGameOver(cur_board, size) == 1) {
 			break;
@@ -127,6 +126,7 @@ int main() {
 			key = 'e';
 		}
 	}
+
 	system("CLS");
 	printBoard(cur_board, size);
 	printf("\nThe current state\n");

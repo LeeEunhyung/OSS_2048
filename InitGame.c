@@ -2,9 +2,72 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+
+#ifdef _WIN32
+
 #include <Windows.h>
 
-#ifdef __linux__
+void textcolor(int foreground, int background) {
+	int color = foreground + background * 16;
+	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), color);
+}//글자 배경색 변경
+
+void printBoard(int **board, int size) {
+	int i, j;
+
+	for (i = 0; i < size; i++) {
+		for (j = 0; j < size; j++) {
+			switch (board[i][j])
+			{
+			case 2:
+				textcolor(WHITE, RED);
+				break;
+			case 4:
+				textcolor(WHITE, BLUE);
+				break;
+			case 8:
+				textcolor(WHITE, GREEN);
+				break;
+			case 16:
+				textcolor(BLACK, YELLOW);
+				break;
+			case 32:
+				textcolor(BLACK, WHITE);
+				break;
+			case 64:
+				textcolor(WHITE, BROWN);
+				break;
+			case 128:
+				textcolor(WHITE, MAGENTA);
+				break;
+			case 256:
+				textcolor(BLACK, CYAN);
+				break;
+			case 512:
+				textcolor(WHITE, DARKGRAY);
+				break;
+			case 1024:
+				textcolor(WHITE, LIGHTBLUE);
+				break;
+			case 2048:
+				textcolor(WHITE, LIGHTRED);
+				break;
+			default:
+				break;
+			}//숫자에 따라 타일 색 설정
+			if (board[i][j]) {
+				printf("| %4d    |", board[i][j]);
+			}
+			else {
+				printf("|         |");
+			}
+			textcolor(15, 0);
+		}
+		printf("\n");
+	}
+}//숫자마다 색을 구분하여 gameboard 상태를 출력
+
+#elif __linux__
 
 #include <termios.h>
 
@@ -30,7 +93,70 @@ int _getch() {
 	return ch;
 }
 
-#endif //_getch가 정의된 conio 라이브러리가 없기 때문에 _getch 함수를 직접 정의
+void printBoard(int **board, int size) {
+	int i, j;
+	char *foreground = "\0";
+	char *background = "\0";
+
+	for (i = 0; i < size; i++) {
+		for (j = 0; j < size; j++) {
+			switch (board[i][j])
+			{
+			case 2:
+			 	foreground = "[37m";
+				background = "[41m";
+				break;
+			case 4:
+				foreground = "[37m";
+				background = "[44m";
+				break;
+			case 8:
+				foreground = "[37m";
+				background = "[42m";
+				break;
+			case 16:
+				foreground = "[30m";
+				background = "[43m";
+				break;
+			case 32:
+				foreground = "[30m";
+				background = "[47m";
+				break;
+			case 64:
+				foreground = "[37m";
+				background = "[40m";
+				break;
+			case 128:
+				foreground = "[37m";
+				background = "[45m";
+				break;
+			case 256:
+				foreground = "[30m";
+				background = "[46m";
+				break;
+			default:
+				break;
+			}//숫자에 따라 색 설정
+			if (board[i][j]) {
+				printf("\033%s\033%s", foreground, background);
+				printf("| %4d    |", board[i][j]);
+				if(i == size - 1 && j == size - 1) {
+					printf("\033[0m");
+					printf(" ");
+				}
+			}
+			else {
+				printf("\033[0m");
+				printf("|         |");
+			}
+
+		}
+		printf("\033[0m");
+		printf("\n");
+	}
+}
+
+#endif //각 OS 환경에 따른 필요 함수를 각각 정의
 
 int** allocateArr(int **arr, int size) {
 	int i = 0, j = 0;
@@ -263,11 +389,6 @@ int checkMove(int **cur_board, int **pre_board, int size) {
 	return 1;
 }//보드에 변경사항이 있는지 검사하고 변경사항이 있으면 조기리턴한다.
 
-void textcolor(int foreground, int background) {
-	int color = foreground + background * 16;
-	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), color);
-}//글자 배경색 변경
-
 void printScore(int **board, int score, int save_score, int menu) {
 	if (menu == CURRENT) {
 		printf("\n☆ The current state ☆\n");
@@ -280,61 +401,6 @@ void printScore(int **board, int score, int save_score, int menu) {
 		printf("   Score: %d\n   High Score: %d\n\n", score, save_score);
 	}
 }//menu(CURRENT, PREVIOUS)에 따라 점수 상태, 키 안내 출력
-
-void printBoard(int **board, int size) {
-	int i, j;
-
-	for (i = 0; i < size; i++) {
-		for (j = 0; j < size; j++) {
-			switch (board[i][j])
-			{
-			case 2:
-				textcolor(WHITE, RED);
-				break;
-			case 4:
-				textcolor(WHITE, BLUE);
-				break;
-			case 8:
-				textcolor(WHITE, GREEN);
-				break;
-			case 16:
-				textcolor(BLACK, YELLOW);
-				break;
-			case 32:
-				textcolor(BLACK, WHITE);
-				break;
-			case 64:
-				textcolor(WHITE, BROWN);
-				break;
-			case 128:
-				textcolor(WHITE, MAGENTA);
-				break;
-			case 256:
-				textcolor(BLACK, CYAN);
-				break;
-			case 512:
-				textcolor(WHITE, DARKGRAY);
-				break;
-			case 1024:
-				textcolor(WHITE, LIGHTBLUE);
-				break;
-			case 2048:
-				textcolor(WHITE, LIGHTRED);
-				break;
-			default:
-				break;
-			}//숫자에 따라 타일 색 설정
-			if (board[i][j]) {
-				printf("| %4d    |", board[i][j]);
-			}
-			else {
-				printf("|         |");
-			}
-			textcolor(15, 0);
-		}
-		printf("\n");
-	}
-}//숫자마다 색을 구분하여 gameboard 상태를 출력
 
 void spawnBlock(int **cur_board, int *emptyIndex, int size) {
 

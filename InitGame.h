@@ -4,6 +4,10 @@
 
 int _getch();
 
+#elif _WIN32
+
+void textcolor(int foreground, int background);
+
 #endif
 
 #define LEFT 75
@@ -53,8 +57,6 @@ int checkMove(int **cur_board, int **pre_board, int size);
 void printBoard(int **board, int size);
 
 void printScore(int **board, int score, int save_score, int menu);
-
-void textcolor(int foreground, int background);
 
 int move(char key, int **cur_board, int **pre_board, int size);
 
