@@ -35,7 +35,6 @@ int main() {
 	- int pre_score: 이전 점수 저장
 	- int high_score: 게임 중 가장 높은 점수 저장
 	- int *emptyIndex: 랜덤 수(2 or 4) 생성 시 cur_board에서 값이 없는 빈 곳의 위치들을 저장
-	- int isWin: 게임의 승패 여부
 	- int i, j: 반복문 실행 시 Index
 	*/
 
@@ -46,7 +45,6 @@ int main() {
 	int pre_score = 0;
 	int high_score = 0;
 	int *emptyIndex = NULL;
-	int isWin = 0;
 	int j = 0;
 	int i = 0;
 
@@ -106,34 +104,15 @@ int main() {
 
 			undo(cur_board, pre_board, size);
 		}
-		if(isGameOver(cur_board, size) == 1) {
+		if (isGameOver(cur_board, size) == 1) {
 			break;
 		}
-
-		i = 1;
-		j = 1;
-		isWin = 0;
-		while (i < size && isWin == 0) {
-			while (j < size && isWin == 0) {
-				if (cur_board[i][j] == 2048) {
-					isWin = 1;
-				}
-				j += 1;
-			}
-			i += 1;
-		}
-		if (isWin == 1) {
-			printf("YOU WON!\n");
+		if (isWin(cur_board, size)) {
 			key = 'e';
 		}
 	}
-	system("CLS");
-	printBoard(cur_board, size);
-	printf("\nThe current state\n");
-	if (isWin != 1) {
-		printf("\nYOU LOSE!");
-	}
-	printf("\n \n GAME OVER!\n Score: %d \n High Score:%d", cur_score, high_score);
+	updateScore(cur_board, &cur_score, &high_score, size);
+	isWinPrint(cur_board, cur_score, high_score, size, isWin(cur_board, size));
 	_getch();
 	return 0;
 }
