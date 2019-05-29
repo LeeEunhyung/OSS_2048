@@ -383,10 +383,10 @@ int checkMove(int **cur_board, int **pre_board, int size) {
 	for (i = 0; i < size; i++) {
 		for (j = 0; j < size; j++) {
 			if (cur_board[i][j] != pre_board[i][j])
-				return 0;
+				return TRUE;
 		}
 	}
-	return 1;
+	return FALSE;
 }//보드에 변경사항이 있는지 검사하고 변경사항이 있으면 조기리턴한다.
 
 void printScore(int **board, int score, int save_score, int menu) {
@@ -431,12 +431,13 @@ int move(char key, int **cur_board, int **pre_board, int size) {
 
 	merge(cur_board, key, size);
 
-	if (checkMove(cur_board, pre_board, size)) {
-		return 1;
-	}//블록이 전혀 움직이지 않은 경우 1을 반환하고 함수를 종료. 움직이지 않았을때 다시 키를 받도록 한다.
+	if (!checkMove(cur_board, pre_board, size)) {
+		return FALSE;
+	}//블록이 전혀 움직이지 않은 경우 FALSE를 반환하고 함수를 종료. 움직이지 않았을때 다시 키를 받도록 한다.
 
 	push(cur_board, key, size);
 
+	return TRUE;
 }//블록을 옮기고 붙어있는 블럭을 합치고 다시 한 번 블록을 옮긴다. merge 이후 생기는 틈을 매꾼다.
 
 void updateScore(int **cur_board, int *cur_score_p, int *high_score_p, int size) {
