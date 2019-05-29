@@ -55,10 +55,10 @@ int main() {
 
 	cur_board = setUp(cur_board, size);//메모리 할당 후 값 0으로 초기화
 	pre_board = allocateArr(pre_board, size);//메모리 할당
+	updateScore(cur_board, &cur_score, &high_score, size);
 	emptyIndex = (int *)malloc(sizeof(int)*(size*size));
 
 	srand((unsigned int)time(NULL));
-
 
 	printBoard(cur_board, size);
 	printScore(cur_board, cur_score, high_score, CURRENT);
@@ -108,7 +108,7 @@ int main() {
 			break;
 		}
 		if (isWin(cur_board, size)) {
-			key = 'e';
+			break;
 		}
 	}
 	updateScore(cur_board, &cur_score, &high_score, size);

@@ -33,6 +33,7 @@ char key;
 
 int** setUp(int **arr, int size);
 int** allocateArr(int **arr, int size);
+int** tilesEmptyBoard(int **board, int size);
 
 void findEmpty();
 
