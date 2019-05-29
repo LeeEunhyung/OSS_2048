@@ -44,6 +44,7 @@ int main() {
 	int cur_score = 0;
 	int pre_score = 0;
 	int high_score = 0;
+	int win_result = 0;
 	int *emptyIndex = NULL;
 	int j = 0;
 	int i = 0;
@@ -74,7 +75,7 @@ int main() {
 
 			spawnBlock(cur_board, emptyIndex, size);
 
-			system("CLS");
+			clearWindow();
 			printBoard(pre_board, size);
 			printScore(pre_board, pre_score, high_score, PREVIOUS);
 
@@ -86,7 +87,7 @@ int main() {
 		if (key == 'x') {
 			refreshGame(cur_board, &cur_score, size);
 
-			system("CLS");
+			clearWindow();
 			printBoard(pre_board, size);
 			printScore(pre_board, pre_score, high_score, PREVIOUS);
 
@@ -94,7 +95,7 @@ int main() {
 			printScore(cur_board, cur_score, high_score, CURRENT);
 		}
 		if (key == 'r') {
-			system("CLS");
+			clearWindow();
 
 			printBoard(cur_board, size);
 			printScore(cur_board, cur_score, high_score, PREVIOUS);
@@ -107,13 +108,14 @@ int main() {
 		if (isGameOver(cur_board, size) == 1) {
 			break;
 		}
-		if (isWin(cur_board, size)) {
+		win_result = isWin(cur_board, size);
+		if (win_result) {
 			break;
 		}
 	}
 	updateScore(cur_board, &cur_score, &high_score, size);
-	isWinPrint(cur_board, cur_score, high_score, size, isWin(cur_board, size));
+	clearWindow();
+	isWinPrint(cur_board, cur_score, high_score, size, win_result);
 	_getch();
 	return 0;
 }
-

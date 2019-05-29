@@ -32,6 +32,18 @@ int _getch() {
 
 #endif //_getch가 정의된 conio 라이브러리가 없기 때문에 _getch 함수를 직접 정의
 
+void clearWindow() {
+	#ifdef _WIN32
+	
+	system("CLS");
+
+	#elif __linux__
+
+	system("clear");
+
+	#endif
+}
+
 int** allocateArr(int **arr, int size) {
 	int i = 0, j = 0;
 
@@ -47,7 +59,7 @@ int** allocateArr(int **arr, int size) {
 	return arr;
 }//arr에 size만큼 메모리 할당하고 0으로 초기화
 
-int** tilesEmptyBoard(int **board, int size) {
+void tilesEmptyBoard(int **board, int size) {
 	int k = 0, i = 0, j = 0;
 	int random = 0;
 
@@ -427,7 +439,6 @@ int isWin(int **board, int size) {
 }//게임 승패 여부 판단
 
 void isWinPrint(int board, int score, int high_score, int size, int win_result) {
-	system("CLS");
 	printBoard(board, size);
 	printf("\n\n>> GAME OVER! <<\n\n");
 

@@ -31,9 +31,11 @@ int _getch();
 
 char key;
 
-int** setUp(int **arr, int size);
+void clearWindow();
+
 int** allocateArr(int **arr, int size);
-int** tilesEmptyBoard(int **board, int size);
+int** setUp(int **arr, int size);
+void tilesEmptyBoard(int **board, int size);
 
 void findEmpty();
 
@@ -65,3 +67,4 @@ int isArrowKey(char key);
 
 int isWin(int **board, int size);
 void isWinPrint(int board, int score, int high_score, int size, int win_result);
+
