@@ -48,6 +48,8 @@ int main() {
 	int *emptyIndex = NULL;
 	int isWin = 0;
 	int isMoved = 0;
+	int click_X = 0;
+	int click_R = 0;
 	int j = 0;
 	int i = 0;
 
@@ -85,9 +87,14 @@ int main() {
 
 			printBoard(cur_board, size);
 			printScore(cur_board, cur_score, high_score, CURRENT);
+
+			click_R = 0;
+			click_X = 0;
 		}
 		if (key == 'x') {
-			refreshGame(cur_board, &cur_score, size);	
+			refreshGame(cur_board, pre_board, size);
+			cur_score = 0;
+			pre_score = 0;
 
 			system("CLS");
 			printBoard(pre_board, size);
@@ -95,20 +102,26 @@ int main() {
 
 			printBoard(cur_board, size);
 			printScore(cur_board, cur_score, high_score, CURRENT);
+
+			click_X = 1;
 		}
 		if (key == 'r') {
-			undo(cur_board, pre_board, size);
-			if (cur_score > high_score) {
-				high_score = cur_score;
+			if(!click_R && !click_X) {
+				undo(cur_board, pre_board, size);
+				if(high_score == cur_score) {
+					high_score = pre_score;
+				}
+				cur_score = pre_score;
+				pre_score = 0;
+
+				system("CLS");
+				printBoard(pre_board, size);
+				printScore(pre_board, pre_score, high_score, PREVIOUS);
+
+				printBoard(cur_board, size);
+				printScore(cur_board, cur_score, high_score, CURRENT);
 			}
-
-			system("CLS");
-
-			printBoard(pre_board, size);
-			printScore(pre_board, pre_score, high_score, PREVIOUS);
-
-			printBoard(cur_board, size);
-			printScore(cur_board, cur_score, high_score, CURRENT);
+			click_R = 1;
 		}
 		if(isGameOver(cur_board, size) == 1) {
 			break;
@@ -142,4 +155,3 @@ int main() {
 	_getch();
 	return 0;
 }
-
