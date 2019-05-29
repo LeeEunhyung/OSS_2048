@@ -468,6 +468,10 @@ void spawnBlock(int **cur_board, int *emptyIndex, int size) {
 }
 
 int move(char key, int **cur_board, int **pre_board, int size) {
+	if (key == ARROW) {
+		key = _getch();
+	}
+
 	push(cur_board, key, size);
 
 	merge(cur_board, key, size);
@@ -505,7 +509,7 @@ int isArrowKey(char key) {
 
 	lower = key == 'w' || key == 'a' || key == 's' || key == 'd';
 	upper = key == 'W' || key == 'A' || key == 'S' || key == 'D';
-	arrow = key == UP || key == LEFT || key == DOWN || key == RIGHT;
+	arrow = key == ARROW;
 
 	output = lower || upper || arrow;
 

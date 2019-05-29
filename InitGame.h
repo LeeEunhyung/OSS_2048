@@ -4,13 +4,16 @@
 
 #ifdef __linux__
 
+#define ARROW 27
 int _getch();
 
 #elif _WIN32
 
+#define ARROW -32
 void textcolor(int foreground, int background);
 
 #endif
+
 
 #define LEFT 75
 #define RIGHT 77
