@@ -45,7 +45,7 @@ int main() {
 	int **cur_board = NULL, **pre_board = NULL;
 	int size = 0;
 	int cur_score = 0, pre_score = 0, high_score = 0;
-	int *emptyIndex = NULL;
+	int *empty_index = NULL;
 	int gameover_result = 0, win_result = 0, move_result = 0;
 	int click_X = 0, click_R = 0;
 	int i = 0, j = 0;
@@ -55,14 +55,14 @@ int main() {
 	cur_board = setUp(cur_board, size);
 	pre_board = allocateArr(pre_board, size);
 	updateScore(cur_board, &cur_score, &high_score, size);
-	emptyIndex = (int *)malloc(sizeof(int)*(size*size));
+	empty_index = (int *)malloc(sizeof(int) * (size * size));
 
 	srand((unsigned int)time(NULL));
 
 	printBoard(cur_board, size);
 	printScore(cur_board, cur_score, high_score, CURRENT);
 
-	while (key != 'e') {
+	while (key != 'e' && key != 'E') {
 		key = _getch();
 
 		srand((unsigned int)time(NULL));
@@ -73,9 +73,9 @@ int main() {
 			move_result = move(cur_board, pre_board, size);
 
 			if (move_result) {
-				spawnTile(cur_board, emptyIndex, size);
+				spawnTile(cur_board, empty_index, size);
 			}
-			move_result = 0;
+			move_result = FALSE;
 
 			clearWindow();
 
@@ -87,10 +87,10 @@ int main() {
 			printBoard(cur_board, size);
 			printScore(cur_board, cur_score, high_score, CURRENT);
 
-			click_R = 0;
-			click_X = 0;
+			click_R = FALSE;
+			click_X = FALSE;
 		}
-		else if (key == 'x') {
+		else if (key == 'x' || key == 'X') {
 			refreshGame(cur_board, pre_board, size);
 
 			cur_score = 0;
@@ -104,9 +104,9 @@ int main() {
 			printBoard(cur_board, size);
 			printScore(cur_board, cur_score, high_score, CURRENT);
 
-			click_X = 1;
+			click_X = TRUE;
 		}
-		else if (key == 'r') {
+		else if (key == 'r' || key == 'R') {
 			if (!click_R && !click_X) {
 				undo(cur_board, pre_board, size);
 
@@ -124,7 +124,7 @@ int main() {
 				printBoard(cur_board, size);
 				printScore(cur_board, cur_score, high_score, CURRENT);
 			}
-			click_R = 1;
+			click_R = TRUE;
 		}
 
 		gameover_result = isGameOver(cur_board, size);

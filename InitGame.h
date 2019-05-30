@@ -57,6 +57,8 @@ char _getch();
 
 #endif
 
+#define MAX_BOARD_SIZE 1000
+
 #define TRUE 1
 #define FALSE 0
 
@@ -74,7 +76,7 @@ int** allocateArr(int **arr, int size);
 int** setUp(int **arr, int size);
 
 void tilesEmptyBoard(int **board, int size);
-void spawnTile(int **cur_board, int *emptyIndex, int size);
+void spawnTile(int **cur_board, int *empty_index, int size);
 
 void refreshGame(int **cur_board, int **pre_board, int size);
 void undo(int **cur_board, int **pre_board, int size);

@@ -13,7 +13,7 @@ void textcolor(int foreground, int background) {
 }//글자 배경색 변경
 
 void printBoard(int **board, int size) {
-	int i, j;
+	int i = 0, j = 0;
 
 	for (i = 0; i < size; i++) {
 		for (j = 0; j < size; j++) {
@@ -94,7 +94,7 @@ char _getch() {
 }//키보드 input값을 획득
 
 void printBoard(int **board, int size) {
-	int i, j;
+	int i = 0, j = 0;
 	char *foreground = "\0";
 	char *background = "\0";
 
@@ -229,26 +229,25 @@ void tilesEmptyBoard(int **board, int size) {
 	}
 }//처음 빈 gameboard에 랜덤 수 2개 생성
 
-void spawnTile(int **cur_board, int *emptyIndex, int size) {
-	int emptyTile = 0;
-	int randomIndex = 0;
-	int randomNum = 0;
-	int i = 0;
-	int j = 0;
+void spawnTile(int **cur_board, int *empty_index, int size) {
+	int i = 0, j = 0;
+	int empty_tile = 0;
+	int random_index = 0;
+	int random_num = 0;
 
 	for (i = 0; i <= size - 1; i++) {
 		for (j = 0; j <= size; j++) {
 			if (cur_board[i][j] == 0) {
-				emptyIndex[emptyTile] = 10 * i + j;
-				emptyTile = emptyTile + 1;
+				empty_index[empty_tile] = MAX_BOARD_SIZE * i + j;
+				empty_tile = empty_tile + 1;
 			}
 		}
 	}
-	randomIndex = rand() % emptyTile;
-	i = emptyIndex[randomIndex] / 10;
-	j = emptyIndex[randomIndex] % 10;
-	randomNum = ((rand() % 2) + 1) * 2;
-	cur_board[i][j] = randomNum;
+	random_index = rand() % empty_tile;
+	i = empty_index[random_index] / MAX_BOARD_SIZE;
+	j = empty_index[random_index] % MAX_BOARD_SIZE;
+	random_num = ((rand() % 2) + 1) * 2;
+	cur_board[i][j] = random_num;
 }//cur_board에서 빈자리를 검색해 배열에 x*MAX_BOARD_SIZE + y로 인덱싱하고 랜덤으로 뽑아서 2 또는 4 타일을 랜덤 배치
 
 void refreshGame(int **cur_board, int **pre_board, int size) {
@@ -323,16 +322,14 @@ int move(int **cur_board, int **pre_board, int size) {
 }//key값에 따라 상하좌우로 타일을 푸시, 병합, 푸시를 수행
 
 void push(int **cur_board, int size) {
-	int i = 0;
-	int j = 0;
-	int k = 0;
+	int i = 0, j = 0, k = 0;
 
 	switch (key) {
 	case 'w':
 	case 'W':
 		for (k = 0; k <= size - 2; k++) {
-			for (j = 0; j <= size - 1; j++) {
-				for (i = 0; i < size - 1; i++) {
+			for (i = 0; i < size - 1; i++) {
+				for (j = 0; j <= size - 1; j++) {
 					if (cur_board[i][j] == 0 && cur_board[i + 1][j] != 0) {
 						cur_board[i][j] = cur_board[i + 1][j];
 						cur_board[i + 1][j] = 0;
@@ -359,8 +356,8 @@ void push(int **cur_board, int size) {
 	case 's':
 	case 'S':
 		for (k = 0; k <= size - 2; k++) {
-			for (j = 0; j <= size - 1; j++) {
-				for (i = size - 1; i > 0; i--) {
+			for (i = size - 1; i > 0; i--) {
+				for (j = 0; j <= size - 1; j++) {
 					if (cur_board[i][j] == 0 && cur_board[i - 1][j] != 0) {
 						cur_board[i][j] = cur_board[i - 1][j];
 						cur_board[i - 1][j] = 0;
@@ -386,8 +383,7 @@ void push(int **cur_board, int size) {
 }//상하좌우 방향 조작 별 타일을 해당 방향 벽으로 푸시
 
 void merge(int **cur_board, int size) {
-	int i = 0;
-	int j = 0;
+	int i = 0, j = 0;
 
 	switch (key) {
 	case 'w':
@@ -442,8 +438,7 @@ void merge(int **cur_board, int size) {
 }//상하좌우 방향 조작 별 타일 병합
 
 void save(int **cur_board, int **pre_board, int *cur_score_p, int *pre_score_p, int size) {
-	int i = 0;
-	int j = 0;
+	int i = 0, j = 0;
 
 	*pre_score_p = *cur_score_p;
 	for (i = 0; i < size; i++) {
@@ -454,8 +449,7 @@ void save(int **cur_board, int **pre_board, int *cur_score_p, int *pre_score_p, 
 }//cur_board를 pre_board에 저장, cur_score를 pre_score에 저장
 
 void updateScore(int **cur_board, int *cur_score_p, int *high_score_p, int size) {
-	int i = 0;
-	int j = 0;
+	int i = 0, j = 0;
 	int sum = 0;
 
 	for (i = 0; i < size; i++) {
@@ -470,8 +464,7 @@ void updateScore(int **cur_board, int *cur_score_p, int *high_score_p, int size)
 }//cur_score와 high_score 갱신
 
 int checkMove(int **cur_board, int **pre_board, int size) {
-	int i = 0;
-	int j = 0;
+	int i = 0, j = 0;
 
 	for (i = 0; i < size; i++) {
 		for (j = 0; j < size; j++) {
