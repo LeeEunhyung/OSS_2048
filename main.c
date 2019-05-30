@@ -91,7 +91,7 @@ int main() {
 			click_R = 0;
 			click_X = 0;
 		}
-		if (key == 'x') {
+		else if (key == 'x') {
 			refreshGame(cur_board, pre_board, size);
 			cur_score = 0;
 			pre_score = 0;
@@ -105,10 +105,10 @@ int main() {
 
 			click_X = 1;
 		}
-		if (key == 'r') {
-			if(!click_R && !click_X) {
+		else if (key == 'r') {
+			if (!click_R && !click_X) {
 				undo(cur_board, pre_board, size);
-				if(high_score == cur_score) {
+				if (high_score == cur_score) {
 					high_score = pre_score;
 				}
 				cur_score = pre_score;
