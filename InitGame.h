@@ -18,6 +18,16 @@
 #define WHITE 15
 //색상 값 define
 
+void textcolor(int foreground, int background);
+
+#define ARROW -32
+
+#define LEFT 75
+#define RIGHT 77
+#define UP 72
+#define DOWN 80
+//방향키 값 define
+
 #elif __linux__
 
 #define F_BLACK "[1;30m"
@@ -36,14 +46,17 @@
 
 int _getch();
 
-void textcolor(int foreground, int background);
+#define ARROW 27
+
+#define LEFT 'D'
+#define RIGHT 'C'
+#define UP 'A'
+#define DOWN 'B'
+//방향키 값 define
 
 #endif
 
-#define LEFT 75
-#define RIGHT 77
-#define UP 72
-#define DOWN 80
+#define SECOND_ARROW 91 //Linux 두 번째 방향키 값
 
 #define TRUE 1
 #define FALSE 0
