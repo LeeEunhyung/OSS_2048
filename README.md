@@ -11,12 +11,11 @@
   - 'x'키: 게임에서 승리 또는 패배 하기 전, 게임을 종료하고 싶을 때 사용한다.
   
 ## License
+[GNU GENERAL PUBLIC LICENSE VERSION 3](LICENSE)
 
 ## Websites
 1. [출처 저장소](https://github.com/mustafakbulut/2048-game)
 2. [우리 프로젝트의 저장소](https://github.com/LeeEunhyung/OSS_2048)
 3. [Wiki](https://github.com/LeeEunhyung/OSS_2048/wiki)
 4. [Issues](https://github.com/LeeEunhyung/OSS_2048/issues/new): 해당 OSS에 문제가 있다면 이 곳에 제보해주세요! 
-
-## Official release version
 
