@@ -1,7 +1,7 @@
 #include "InitGame.h"
 #include <stdio.h>
-#include <time.h>
 #include <stdlib.h>
+#include <time.h>
 
 #ifdef _WIN32
 
@@ -34,51 +34,51 @@ int main() {
 	- int pre_score: 이전 점수 저장
 	- int high_score: 게임 중 가장 높은 점수 저장
 	- int *emptyIndex: 랜덤 수(2 or 4) 생성 시 cur_board에서 값이 없는 빈 곳의 위치들을 저장
-	- int isMoved: 이동한 경우 표시하는 변수
+	- int gameover_result: 게임 종료 여부 판단
+	- int win_result: 승패 여부 판단
+	- int move_result: 타일 이동 여부 판단
+	- int click_X: x키 클릭 여부 판단
+	- int click_R: r키 클릭 여부 판단
 	- int i, j: 반복문 실행 시 Index
 	*/
 
-	int **cur_board = NULL;
-	int **pre_board = NULL;
+	int **cur_board = NULL, **pre_board = NULL;
 	int size = 0;
-	int cur_score = 0;
-	int pre_score = 0;
-	int high_score = 0;
-	int win_result = 0;
-	int *emptyIndex = NULL;
-	int isMoved = 0;
-	int click_X = 0;
-	int click_R = 0;
-	int j = 0;
-	int i = 0;
+	int cur_score = 0, pre_score = 0, high_score = 0;
+	int *empty_index = NULL;
+	int gameover_result = 0, win_result = 0, move_result = 0;
+	int click_X = 0, click_R = 0;
+	int i = 0, j = 0;
 
 	size = inputBoardSize();
 
-	cur_board = setUp(cur_board, size);//메모리 할당 후 값 0으로 초기화
-	pre_board = allocateArr(pre_board, size);//메모리 할당
+	cur_board = setUp(cur_board, size);
+	pre_board = allocateArr(pre_board, size);
 	updateScore(cur_board, &cur_score, &high_score, size);
-	emptyIndex = (int *)malloc(sizeof(int)*(size*size));
+	empty_index = (int *)malloc(sizeof(int) * (size * size));
 
 	srand((unsigned int)time(NULL));
 
 	printBoard(cur_board, size);
 	printScore(cur_board, cur_score, high_score, CURRENT);
 
-	while (key != 'e') {
+	while (key != 'e' && key != 'E') {
 		key = _getch();
+
 		srand((unsigned int)time(NULL));
 
-		if (isArrowKey(key)) {
+		if (isArrowKey()) {
 			save(cur_board, pre_board, &cur_score, &pre_score, size);
 
-			isMoved = move(key, cur_board, pre_board, size);
+			move_result = move(cur_board, pre_board, size);
 
-			if (isMoved) {
-				spawnBlock(cur_board, emptyIndex, size);
+			if (move_result) {
+				spawnTile(cur_board, empty_index, size);
 			}
-			isMoved = 0;
+			move_result = FALSE;
 
 			clearWindow();
+
 			printBoard(pre_board, size);
 			printScore(pre_board, pre_score, high_score, PREVIOUS);
 
@@ -87,26 +87,29 @@ int main() {
 			printBoard(cur_board, size);
 			printScore(cur_board, cur_score, high_score, CURRENT);
 
-			click_R = 0;
-			click_X = 0;
+			click_R = FALSE;
+			click_X = FALSE;
 		}
-		else if (key == 'x') {
+		else if (key == 'x' || key == 'X') {
 			refreshGame(cur_board, pre_board, size);
+
 			cur_score = 0;
 			pre_score = 0;
 
 			clearWindow();
+
 			printBoard(pre_board, size);
 			printScore(pre_board, pre_score, high_score, PREVIOUS);
 
 			printBoard(cur_board, size);
 			printScore(cur_board, cur_score, high_score, CURRENT);
 
-			click_X = 1;
+			click_X = TRUE;
 		}
-		else if (key == 'r') {
+		else if (key == 'r' || key == 'R') {
 			if (!click_R && !click_X) {
 				undo(cur_board, pre_board, size);
+
 				if (high_score == cur_score) {
 					high_score = pre_score;
 				}
@@ -114,25 +117,33 @@ int main() {
 				pre_score = 0;
 
 				clearWindow();
+
 				printBoard(pre_board, size);
 				printScore(pre_board, pre_score, high_score, PREVIOUS);
 
 				printBoard(cur_board, size);
 				printScore(cur_board, cur_score, high_score, CURRENT);
 			}
-			click_R = 1;
+			click_R = TRUE;
 		}
-		if (isGameOver(cur_board, size) == 1) {
+
+		gameover_result = isGameOver(cur_board, size);
+		if (gameover_result) {
 			break;
 		}
+
 		win_result = isWin(cur_board, size);
 		if (win_result) {
 			break;
 		}
 	}
+
 	updateScore(cur_board, &cur_score, &high_score, size);
+
 	clearWindow();
 	isWinPrint(cur_board, cur_score, high_score, size, win_result);
+
 	_getch();
+
 	return 0;
 }
