@@ -103,7 +103,7 @@ void printBoard(int **board, int size) {
 			switch (board[i][j])
 			{
 			case 2:
-			 	foreground = "[37m";
+				foreground = "[37m";
 				background = "[41m";
 				break;
 			case 4:
@@ -140,7 +140,7 @@ void printBoard(int **board, int size) {
 			if (board[i][j]) {
 				printf("\033%s\033%s", foreground, background);
 				printf("| %4d    |", board[i][j]);
-				if(i == size - 1 && j == size - 1) {
+				if (i == size - 1 && j == size - 1) {
 					printf("\033[0m");
 					printf(" ");
 				}
@@ -159,16 +159,29 @@ void printBoard(int **board, int size) {
 #endif //각 OS 환경에 따른 필요 함수를 각각 정의
 
 void clearWindow() {
-	#ifdef _WIN32
-	
+#ifdef _WIN32
+
 	system("CLS");
 
-	#elif __linux__
+#elif __linux__
 
 	system("clear");
 
-	#endif
+#endif
 }
+
+int inputBoardSize() {
+	int input_size = 0;
+
+	while (input_size <= 1) {
+		printf("\n     >>>>>>> 2 0 4 8 GAME <<<<<<<\n");
+		printf("\n  Please write a number greater than 1!\n");
+		printf("\n    => Enter the desired game board size: ");
+		scanf("%d", &input_size);
+		clearWindow();
+	}
+	return input_size;
+}//게임 시작 시 size X size 행렬의 조건에 따라 gameboard size를 입력 받음
 
 int** allocateArr(int **arr, int size) {
 	int i = 0, j = 0;
@@ -208,17 +221,17 @@ int** setUp(int **arr, int size) {
 void findEmpty() {}
 
 void refreshGame(int **cur_board, int **pre_board, int size) {
-  int i = 0, j = 0;
-  int cnt = 0;
-  int random = 0;
+	int i = 0, j = 0;
+	int cnt = 0;
+	int random = 0;
 
-  for (i = 0; i <= size - 1; i++) {
-    for (j = 0; j <= size - 1; j++) {
-      cur_board[i][j] = 0;
-      pre_board[i][j] = 0;
-    }
-  }
-  for (cnt = 0; cnt < 2; cnt++) {
+	for (i = 0; i <= size - 1; i++) {
+		for (j = 0; j <= size - 1; j++) {
+			cur_board[i][j] = 0;
+			pre_board[i][j] = 0;
+		}
+	}
+	for (cnt = 0; cnt < 2; cnt++) {
 		i = rand() % size;
 		j = rand() % size;
 		random = ((rand() % 2) + 1) * 2;
@@ -228,19 +241,19 @@ void refreshGame(int **cur_board, int **pre_board, int size) {
 void undo(int **cur_board, int **pre_board, int size) {
 	int i = 0, j = 0;
 
-  for (i = 0; i < size; i++) {
-    for (j = 0; j < size; j++) {
-      cur_board[i][j] = pre_board[i][j];
-      pre_board[i][j] = 0;
-    }
-  }
+	for (i = 0; i < size; i++) {
+		for (j = 0; j < size; j++) {
+			cur_board[i][j] = pre_board[i][j];
+			pre_board[i][j] = 0;
+		}
+	}
 } //최근 방향키 움직임을 취소하고 이전의 상태로 복원
 int isGameOver(int **cur_board, int size) {
 	int i = 0, j = 0;
 
 	for (i = 0; i < size; i++) {
 		for (j = 0; j < size; j++) {
-			if(cur_board[i][j] == 0) {
+			if (cur_board[i][j] == 0) {
 				return 0;
 			}
 		}
@@ -248,14 +261,14 @@ int isGameOver(int **cur_board, int size) {
 
 	for (i = 0; i < size; i++) {
 		for (j = 0; j < size - 1; j++) {
-			if(cur_board[i][j] == cur_board[i][j + 1]) {
+			if (cur_board[i][j] == cur_board[i][j + 1]) {
 				return 0;
 			}
 		}
 	}
 	for (i = 0; i < size - 1; i++) {
 		for (j = 0; j < size; j++) {
-			if(cur_board[i][j] == cur_board[i + 1][j]) {
+			if (cur_board[i][j] == cur_board[i + 1][j]) {
 				return 0;
 			}
 		}

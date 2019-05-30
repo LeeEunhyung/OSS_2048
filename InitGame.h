@@ -42,6 +42,7 @@ char key;
 
 void clearWindow();
 
+int inputBoardSize();
 int** allocateArr(int **arr, int size);
 int** setUp(int **arr, int size);
 void tilesEmptyBoard(int **board, int size);
@@ -76,4 +77,3 @@ int isWin(int **board, int size);
 void isWinPrint(int **board, int score, int high_score, int size, int win_result);
 
 #endif
-

@@ -52,8 +52,7 @@ int main() {
 	int j = 0;
 	int i = 0;
 
-	printf("Enter the desired game board size: ");
-	scanf("%d", &size);
+	size = inputBoardSize();
 
 	cur_board = setUp(cur_board, size);//메모리 할당 후 값 0으로 초기화
 	pre_board = allocateArr(pre_board, size);//메모리 할당
