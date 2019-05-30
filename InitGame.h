@@ -38,8 +38,11 @@ void textcolor(int foreground, int background);
 
 char key;
 
-int** setUp(int **arr, int size);
+void clearWindow();
+
 int** allocateArr(int **arr, int size);
+int** setUp(int **arr, int size);
+void tilesEmptyBoard(int **board, int size);
 
 void findEmpty();
 
@@ -66,3 +69,7 @@ int move(char key, int **cur_board, int **pre_board, int size);
 void updateScore(int **cur_board, int *cur_score, int *high_score, int size);
 
 int isArrowKey(char key);
+
+int isWin(int **board, int size);
+void isWinPrint(int board, int score, int high_score, int size, int win_result);
+

@@ -35,7 +35,6 @@ int main() {
 	- int high_score: 게임 중 가장 높은 점수 저장
 	- int *emptyIndex: 랜덤 수(2 or 4) 생성 시 cur_board에서 값이 없는 빈 곳의 위치들을 저장
 	- int isMoved: 이동한 경우 표시하는 변수
-	- int isWin: 게임의 승패 여부
 	- int i, j: 반복문 실행 시 Index
 	*/
 
@@ -45,8 +44,8 @@ int main() {
 	int cur_score = 0;
 	int pre_score = 0;
 	int high_score = 0;
+	int win_result = 0;
 	int *emptyIndex = NULL;
-	int isWin = 0;
 	int isMoved = 0;
 	int click_X = 0;
 	int click_R = 0;
@@ -58,6 +57,7 @@ int main() {
 
 	cur_board = setUp(cur_board, size);//메모리 할당 후 값 0으로 초기화
 	pre_board = allocateArr(pre_board, size);//메모리 할당
+	updateScore(cur_board, &cur_score, &high_score, size);
 	emptyIndex = (int *)malloc(sizeof(int)*(size*size));
 
 	srand((unsigned int)time(NULL));
@@ -79,7 +79,7 @@ int main() {
 			}
 			isMoved = 0;
 
-			system("CLS");
+			clearWindow();
 			printBoard(pre_board, size);
 			printScore(pre_board, pre_score, high_score, PREVIOUS);
 
@@ -96,7 +96,7 @@ int main() {
 			cur_score = 0;
 			pre_score = 0;
 
-			system("CLS");
+			clearWindow();
 			printBoard(pre_board, size);
 			printScore(pre_board, pre_score, high_score, PREVIOUS);
 
@@ -114,7 +114,7 @@ int main() {
 				cur_score = pre_score;
 				pre_score = 0;
 
-				system("CLS");
+				clearWindow();
 				printBoard(pre_board, size);
 				printScore(pre_board, pre_score, high_score, PREVIOUS);
 
@@ -123,35 +123,17 @@ int main() {
 			}
 			click_R = 1;
 		}
-		if(isGameOver(cur_board, size) == 1) {
+		if (isGameOver(cur_board, size) == 1) {
 			break;
 		}
-
-		i = 1;
-		j = 1;
-		isWin = 0;
-		while (i < size && isWin == 0) {
-			while (j < size && isWin == 0) {
-				if (cur_board[i][j] == 2048) {
-					isWin = 1;
-				}
-				j += 1;
-			}
-			i += 1;
-		}
-		if (isWin == 1) {
-			printf("YOU WON!\n");
-			key = 'e';
+		win_result = isWin(cur_board, size);
+		if (win_result) {
+			break;
 		}
 	}
-
-	system("CLS");
-	printBoard(cur_board, size);
-	printf("\nThe current state\n");
-	if (isWin != 1) {
-		printf("\nYOU LOSE!");
-	}
-	printf("\n \n GAME OVER!\n Score: %d \n High Score:%d", cur_score, high_score);
+	updateScore(cur_board, &cur_score, &high_score, size);
+	clearWindow();
+	isWinPrint(cur_board, cur_score, high_score, size, win_result);
 	_getch();
 	return 0;
 }

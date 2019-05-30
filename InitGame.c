@@ -72,7 +72,7 @@ void printBoard(int **board, int size) {
 #include <termios.h>
 
 int _getch() {
-  	int ch;
+	int ch;
 
 	struct termios buf;
 	struct termios save;
@@ -158,6 +158,18 @@ void printBoard(int **board, int size) {
 
 #endif //각 OS 환경에 따른 필요 함수를 각각 정의
 
+void clearWindow() {
+	#ifdef _WIN32
+	
+	system("CLS");
+
+	#elif __linux__
+
+	system("clear");
+
+	#endif
+}
+
 int** allocateArr(int **arr, int size) {
 	int i = 0, j = 0;
 
@@ -173,20 +185,25 @@ int** allocateArr(int **arr, int size) {
 	return arr;
 }//arr에 size만큼 메모리 할당하고 0으로 초기화
 
-int** setUp(int **arr, int size) {
+void tilesEmptyBoard(int **board, int size) {
 	int k = 0, i = 0, j = 0;
 	int random = 0;
 
-	key = 0;
-	arr = allocateArr(arr, size);
 	for (k = 0; k < 2; k++) {
 		i = rand() % size;
 		j = rand() % size;
 		random = ((rand() % 2) + 1) * 2;
-		arr[i][j] = random;
+		board[i][j] = random;
 	}
+}//처음 빈 gameboard에 랜덤 수 2개 생성
+
+int** setUp(int **arr, int size) {
+	key = 0;
+	arr = allocateArr(arr, size);
+	tilesEmptyBoard(arr, size);
+
 	return arr;
-}//메모리 할당된 arr에 랜덤 수 2개 생성
+}//arr에 메모리를 할당한 후 랜덤 수 2개 생성하여 return
 
 void findEmpty() {}
 
@@ -209,7 +226,7 @@ void refreshGame(int **cur_board, int **pre_board, int size) {
 	}
 } //현재 GameBoard를 초기화하고 게임을 재 시작
 void undo(int **cur_board, int **pre_board, int size) {
-  int i = 0, j = 0;
+	int i = 0, j = 0;
 
   for (i = 0; i < size; i++) {
     for (j = 0; j < size; j++) {
@@ -219,30 +236,30 @@ void undo(int **cur_board, int **pre_board, int size) {
   }
 } //최근 방향키 움직임을 취소하고 이전의 상태로 복원
 int isGameOver(int **cur_board, int size) {
-  int i = 0, j = 0;
+	int i = 0, j = 0;
 
-  for (i = 0; i <= size - 1; i++) {
-    for (j = 0; j <= size - 1; j++) {
-      if (cur_board[i][j] == 0) {
-        return 0;
-      }
-    }
-  }
-  for (i = 0; i <= size - 2; i++) {
-    for (j = 0; j <= size - 2; j++) {
-      if (i == size - 1 && j != size - 1 && cur_board[i][j] == cur_board[i][j + 1]) {
-        return 0;
-      }
-      if (j == size - 1 && i != size - 1 && cur_board[i][j] == cur_board[i + 1][j]) {
-        return 0;
-      }
-      if (cur_board[i][j] == cur_board[i + 1][j] || cur_board[i][j] == cur_board[i][j + 1]) {
-        return 0;
-      }
-    }
-  }
+	for (i = 0; i <= size - 1; i++) {
+		for (j = 0; j <= size - 1; j++) {
+			if (cur_board[i][j] == 0) {
+				return 0;
+			}
+		}
+	}
+	for (i = 0; i <= size - 2; i++) {
+		for (j = 0; j <= size - 2; j++) {
+			if (i == size - 1 && j != size - 1 && cur_board[i][j] == cur_board[i][j + 1]) {
+				return 0;
+			}
+			if (j == size - 1 && i != size - 1 && cur_board[i][j] == cur_board[i + 1][j]) {
+				return 0;
+			}
+			if (cur_board[i][j] == cur_board[i + 1][j] || cur_board[i][j] == cur_board[i][j + 1]) {
+				return 0;
+			}
+		}
+	}
 
-  return 1;
+	return 1;
 } //반환값이 1이면 게임 오버되어 키 입력 불가
 
 void save(int **cur_board, int **pre_board, int *cur_score_p, int *pre_score_p, int size) {
@@ -479,4 +496,36 @@ int isArrowKey(char key) {
 
 	return output;
 }// 입력받은 키가 방향조작키인지 확인하기 위한 함수 키를 받아서 방향키인지 확인 후 논리 값 출력
-//output: 출력할 논리 값 lower: 소문자 논리값 upper: 대문자 논리 값 arrow: 방향키 논리 값
+ //output: 출력할 논리 값 lower: 소문자 논리값 upper: 대문자 논리 값 arrow: 방향키 논리 값
+
+int isWin(int **board, int size) {
+	int i = 0, j = 0;
+	int win = 0;
+
+	while (i < size && win == 0) {
+		while (j < size && win == 0) {
+			if (board[i][j] == 2048) {
+				win = 1;
+			}
+			j++;
+		}
+		i++;
+	}
+	return win;
+}//게임 승패 여부 판단
+
+void isWinPrint(int board, int score, int high_score, int size, int win_result) {
+	printBoard(board, size);
+	printf("\n\n>> GAME OVER! <<\n\n");
+
+	if (!win_result) {
+		printf(": You did not make 2048.\n");
+		printf("  YOU LOSE!\n");
+	}
+	else {
+		printf(": You made 2048.\n");
+		printf("  YOU WIN!\n");
+	}
+	printf("\n>> last turn state <<\n");
+	printf(": Score: %d\n: High Score: %d\n", score, high_score);
+}//승패 여부에 따른 상태 출력
