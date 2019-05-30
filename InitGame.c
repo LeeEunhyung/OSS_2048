@@ -165,7 +165,7 @@ void printBoard(int **board, int size) {
 		printf("\033[0m");
 		printf("\n");
 	}
-}
+}//숫자마다 색을 구분하여 gameboard 상태를 출력
 
 #endif //각 OS 환경에 따른 필요 함수를 각각 정의
 
@@ -179,7 +179,7 @@ void clearWindow() {
 	system("clear");
 
 #endif
-}//실행화면 리셋
+}//OS 환경에 맞게 실행화면 리셋
 
 int inputBoardSize() {
 	int input_size = 0;
@@ -229,7 +229,7 @@ void tilesEmptyBoard(int **board, int size) {
 	}
 }//처음 빈 gameboard에 랜덤 수 2개 생성
 
-void spawnBlock(int **cur_board, int *emptyIndex, int size) {
+void spawnTile(int **cur_board, int *emptyIndex, int size) {
 	int emptyTile = 0;
 	int randomIndex = 0;
 	int randomNum = 0;
@@ -249,7 +249,7 @@ void spawnBlock(int **cur_board, int *emptyIndex, int size) {
 	j = emptyIndex[randomIndex] % 10;
 	randomNum = ((rand() % 2) + 1) * 2;
 	cur_board[i][j] = randomNum;
-}
+}//cur_board에서 빈자리를 검색해 배열에 x*MAX_BOARD_SIZE + y로 인덱싱하고 랜덤으로 뽑아서 2 또는 4 타일을 랜덤 배치
 
 void refreshGame(int **cur_board, int **pre_board, int size) {
 	int i = 0, j = 0;
@@ -268,7 +268,7 @@ void refreshGame(int **cur_board, int **pre_board, int size) {
 		random = ((rand() % 2) + 1) * 2;
 		cur_board[i][j] = random;
 	}
-} //현재 GameBoard를 초기화하고 게임을 재 시작
+}//cur_board와 pre_board를 초기화하고 게임을 재 시작
 
 void undo(int **cur_board, int **pre_board, int size) {
 	int i = 0, j = 0;
@@ -279,17 +279,19 @@ void undo(int **cur_board, int **pre_board, int size) {
 			pre_board[i][j] = 0;
 		}
 	}
-} //최근 방향키 움직임을 취소하고 이전의 상태로 복원
+}//최근 방향키 움직임을 취소하기 위해 cur_board에 pre_board를 복원
 
 int move(int **cur_board, int **pre_board, int size) {
 	if (key == ARROW) {
 		key = _getch();
 
 		#ifdef __linux__
+
 		if (key == SECOND_ARROW) {
 			key = _getch();
 		}
-		#endif//3바이트로 된 방향키를 가지는 Linux
+
+		#endif//3바이트로 된 방향키를 가지는 Linux OS환경에서만 실행
 
 		switch (key) {
 		case UP:
@@ -313,12 +315,12 @@ int move(int **cur_board, int **pre_board, int size) {
 
 	if (!checkMove(cur_board, pre_board, size)) {
 		return FALSE;
-	}//블록이 전혀 움직이지 않은 경우에 FALSE를 반환
+	}//타일이 전혀 움직이지 않은 경우에 FALSE를 반환
 
-	push(cur_board, size);
+	push(cur_board, size);//푸시, 병합 후에 생기는 틈을 매꾸기 위해 푸시를 한번 더 수행
 
 	return TRUE;
-}//push와 merge 후에 생기는 틈을 매꾸기 위해 push를 한번 더 수행
+}//key값에 따라 상하좌우로 타일을 푸시, 병합, 푸시를 수행
 
 void push(int **cur_board, int size) {
 	int i = 0;
@@ -381,7 +383,7 @@ void push(int **cur_board, int size) {
 		}
 		break;
 	}
-}
+}//상하좌우 방향 조작 별 타일을 해당 방향 벽으로 푸시
 
 void merge(int **cur_board, int size) {
 	int i = 0;
@@ -437,7 +439,7 @@ void merge(int **cur_board, int size) {
 		}
 		break;
 	}
-}
+}//상하좌우 방향 조작 별 타일 병합
 
 void save(int **cur_board, int **pre_board, int *cur_score_p, int *pre_score_p, int size) {
 	int i = 0;
@@ -449,7 +451,7 @@ void save(int **cur_board, int **pre_board, int *cur_score_p, int *pre_score_p, 
 			pre_board[i][j] = cur_board[i][j];
 		}
 	}
-}
+}//cur_board를 pre_board에 저장, cur_score를 pre_score에 저장
 
 void updateScore(int **cur_board, int *cur_score_p, int *high_score_p, int size) {
 	int i = 0;
@@ -465,7 +467,7 @@ void updateScore(int **cur_board, int *cur_score_p, int *high_score_p, int size)
 	if (*cur_score_p > *high_score_p) {
 		*high_score_p = *cur_score_p;
 	}
-}
+}//cur_score와 high_score 갱신
 
 int checkMove(int **cur_board, int **pre_board, int size) {
 	int i = 0;
@@ -505,7 +507,7 @@ int isGameOver(int **cur_board, int size) {
 		}
 	}
 	return TRUE;
-} //게임의 종료 여부 판단
+} //게임 종료 여부 판단
 
 int isArrowKey() {
 	int output = 0;//output: 출력할 논리 값
@@ -520,7 +522,7 @@ int isArrowKey() {
 	output = lower || upper || arrow;
 
 	return output;
-}// 입력받은 키가 방향조작키인지 확인하기 위한 함수 키를 받아서 방향키인지 확인 후 논리 값 출력
+}// 입력받은 키가 방향조작키인지 확인하기 위한 함수 키를 받아서 방향키인지 확인 후 논리 값 반환
 
 int isWin(int **board, int size) {
 	int i = 0, j = 0;

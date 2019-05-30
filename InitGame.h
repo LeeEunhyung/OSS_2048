@@ -74,7 +74,7 @@ int** allocateArr(int **arr, int size);
 int** setUp(int **arr, int size);
 
 void tilesEmptyBoard(int **board, int size);
-void spawnBlock(int **cur_board, int *emptyIndex, int size);
+void spawnTile(int **cur_board, int *emptyIndex, int size);
 
 void refreshGame(int **cur_board, int **pre_board, int size);
 void undo(int **cur_board, int **pre_board, int size);

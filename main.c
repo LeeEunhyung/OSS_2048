@@ -73,7 +73,7 @@ int main() {
 			move_result = move(cur_board, pre_board, size);
 
 			if (move_result) {
-				spawnBlock(cur_board, emptyIndex, size);
+				spawnTile(cur_board, emptyIndex, size);
 			}
 			move_result = 0;
 
