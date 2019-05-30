@@ -71,8 +71,8 @@ void printBoard(int **board, int size) {
 
 #include <termios.h>
 
-int _getch() {
-	int ch;
+char _getch() {
+	char ch;
 
 	struct termios buf;
 	struct termios save;
@@ -91,7 +91,7 @@ int _getch() {
 	tcsetattr(0, TCSAFLUSH, &save);
 
 	return ch;
-}
+}//키보드 input값을 획득
 
 void printBoard(int **board, int size) {
 	int i, j;
@@ -179,7 +179,7 @@ void clearWindow() {
 	system("clear");
 
 #endif
-}
+}//실행화면 리셋
 
 int inputBoardSize() {
 	int input_size = 0;
@@ -192,7 +192,7 @@ int inputBoardSize() {
 		clearWindow();
 	}
 	return input_size;
-}//게임 시작 시 size X size 행렬의 조건에 따라 gameboard size를 입력 받음
+}//게임 시작 시 size X size 행렬의 조건에 따라 gameboard size를 입력
 
 int** allocateArr(int **arr, int size) {
 	int i = 0, j = 0;
@@ -209,6 +209,14 @@ int** allocateArr(int **arr, int size) {
 	return arr;
 }//arr에 size만큼 메모리 할당하고 0으로 초기화
 
+int** setUp(int **arr, int size) {
+	key = 0;
+	arr = allocateArr(arr, size);
+	tilesEmptyBoard(arr, size);
+
+	return arr;
+}//arr에 메모리를 할당한 후 랜덤 수 2개 생성하여 리턴
+
 void tilesEmptyBoard(int **board, int size) {
 	int k = 0, i = 0, j = 0;
 	int random = 0;
@@ -221,15 +229,27 @@ void tilesEmptyBoard(int **board, int size) {
 	}
 }//처음 빈 gameboard에 랜덤 수 2개 생성
 
-int** setUp(int **arr, int size) {
-	key = 0;
-	arr = allocateArr(arr, size);
-	tilesEmptyBoard(arr, size);
+void spawnBlock(int **cur_board, int *emptyIndex, int size) {
+	int emptyTile = 0;
+	int randomIndex = 0;
+	int randomNum = 0;
+	int i = 0;
+	int j = 0;
 
-	return arr;
-}//arr에 메모리를 할당한 후 랜덤 수 2개 생성하여 return
-
-void findEmpty() {}
+	for (i = 0; i <= size - 1; i++) {
+		for (j = 0; j <= size; j++) {
+			if (cur_board[i][j] == 0) {
+				emptyIndex[emptyTile] = 10 * i + j;
+				emptyTile = emptyTile + 1;
+			}
+		}
+	}
+	randomIndex = rand() % emptyTile;
+	i = emptyIndex[randomIndex] / 10;
+	j = emptyIndex[randomIndex] % 10;
+	randomNum = ((rand() % 2) + 1) * 2;
+	cur_board[i][j] = randomNum;
+}
 
 void refreshGame(int **cur_board, int **pre_board, int size) {
 	int i = 0, j = 0;
@@ -249,6 +269,7 @@ void refreshGame(int **cur_board, int **pre_board, int size) {
 		cur_board[i][j] = random;
 	}
 } //현재 GameBoard를 초기화하고 게임을 재 시작
+
 void undo(int **cur_board, int **pre_board, int size) {
 	int i = 0, j = 0;
 
@@ -259,51 +280,50 @@ void undo(int **cur_board, int **pre_board, int size) {
 		}
 	}
 } //최근 방향키 움직임을 취소하고 이전의 상태로 복원
-int isGameOver(int **cur_board, int size) {
-	int i = 0, j = 0;
 
-	for (i = 0; i < size; i++) {
-		for (j = 0; j < size; j++) {
-			if (cur_board[i][j] == 0) {
-				return 0;
-			}
+int move(int **cur_board, int **pre_board, int size) {
+	if (key == ARROW) {
+		key = _getch();
+
+		#ifdef __linux__
+		if (key == SECOND_ARROW) {
+			key = _getch();
 		}
-	}
+		#endif//3바이트로 된 방향키를 가지는 Linux
 
-	for (i = 0; i < size; i++) {
-		for (j = 0; j < size - 1; j++) {
-			if (cur_board[i][j] == cur_board[i][j + 1]) {
-				return 0;
-			}
+		switch (key) {
+		case UP:
+			key = 'w';
+			break;
+		case DOWN:
+			key = 's';
+			break;
+		case LEFT:
+			key = 'a';
+			break;
+		case RIGHT:
+			key = 'd';
+			break;
 		}
-	}
-	for (i = 0; i < size - 1; i++) {
-		for (j = 0; j < size; j++) {
-			if (cur_board[i][j] == cur_board[i + 1][j]) {
-				return 0;
-			}
-		}
-	}
+	}//방향키를 받으면 2~3 바이트로 되어있기 때문에 마지막 char만 쓸 수 있으므로 앞의 char를 제거
 
-	return 1;
-} //반환값이 1이면 게임 오버되어 키 입력 불가
+	push(cur_board, size);
 
-void save(int **cur_board, int **pre_board, int *cur_score_p, int *pre_score_p, int size) {
+	merge(cur_board, size);
+
+	if (!checkMove(cur_board, pre_board, size)) {
+		return FALSE;
+	}//블록이 전혀 움직이지 않은 경우에 FALSE를 반환
+
+	push(cur_board, size);
+
+	return TRUE;
+}//push와 merge 후에 생기는 틈을 매꾸기 위해 push를 한번 더 수행
+
+void push(int **cur_board, int size) {
 	int i = 0;
 	int j = 0;
-
-	*pre_score_p = *cur_score_p;
-	for (i = 0; i < size; i++) {
-		for (j = 0; j < size; j++) {
-			pre_board[i][j] = cur_board[i][j];
-		}
-	}
-}
-
-void push(int **cur_board, char key, int size) {
 	int k = 0;
-	int i = 0;
-	int j = 0;
 
 	switch (key) {
 	case 'w':
@@ -363,8 +383,7 @@ void push(int **cur_board, char key, int size) {
 	}
 }
 
-void merge(int **cur_board, char key, int size) {
-
+void merge(int **cur_board, int size) {
 	int i = 0;
 	int j = 0;
 
@@ -420,93 +439,17 @@ void merge(int **cur_board, char key, int size) {
 	}
 }
 
-int checkMove(int **cur_board, int **pre_board, int size) {
+void save(int **cur_board, int **pre_board, int *cur_score_p, int *pre_score_p, int size) {
 	int i = 0;
 	int j = 0;
 
+	*pre_score_p = *cur_score_p;
 	for (i = 0; i < size; i++) {
 		for (j = 0; j < size; j++) {
-			if (cur_board[i][j] != pre_board[i][j])
-				return TRUE;
+			pre_board[i][j] = cur_board[i][j];
 		}
 	}
-	return FALSE;
-}//보드에 변경사항이 있는지 검사하고 변경사항이 있으면 조기리턴한다.
-
-void printScore(int **board, int score, int save_score, int menu) {
-	if (menu == CURRENT) {
-		printf("\n☆ The current state ☆\n");
-		printf("   Score: %d\n   High Score: %d", score, save_score);
-		printf("\n   => Press w: up / Press a:left / Press s: down / Press d: right\n");
-		printf("   => Press e : finish the game / Press x : refresh / Press r : restore\n");
-	}
-	else if (menu == PREVIOUS) {
-		printf("\n★ The previous state ★\n");
-		printf("   Score: %d\n   High Score: %d\n\n", score, save_score);
-	}
-}//menu(CURRENT, PREVIOUS)에 따라 점수 상태, 키 안내 출력
-
-void spawnBlock(int **cur_board, int *emptyIndex, int size) {
-
-	int emptyTile = 0;
-	int randomIndex = 0;
-	int randomNum = 0;
-	int i = 0;
-	int j = 0;
-
-	for (i = 0; i <= size - 1; i++) {
-		for (j = 0; j <= size; j++) {
-			if (cur_board[i][j] == 0) {
-				emptyIndex[emptyTile] = 10 * i + j;
-				emptyTile = emptyTile + 1;
-			}
-		}
-	}
-	randomIndex = rand() % emptyTile;
-	i = emptyIndex[randomIndex] / 10;
-	j = emptyIndex[randomIndex] % 10;
-	randomNum = ((rand() % 2) + 1) * 2;
-	cur_board[i][j] = randomNum;
-
 }
-
-int move(char key, int **cur_board, int **pre_board, int size) {
-	if (key == ARROW) {
-		key = _getch();
-
-		if (key == SECOND_ARROW) {
-			key = _getch();
-		}// 리눅스는 특별히 3바이트로 된 방향키를 가짐.
-
-		switch (key) {
-		case UP:
-			key = 'w';
-			break;
-		case DOWN:
-			key = 's';
-			break;
-		case LEFT:
-			key = 'a';
-			break;
-		case RIGHT:
-			key = 'd';
-			break;
-		}
-
-	}//방향키를 받으면 2~3 바이트로 되어있기 때문에 마지막 char만 쓸 수 있으므로 앞을 char를 제거하는 조건문 
-	
-	push(cur_board, key, size);
-
-	merge(cur_board, key, size);
-
-	if (!checkMove(cur_board, pre_board, size)) {
-		return FALSE;
-	}//블록이 전혀 움직이지 않은 경우 FALSE를 반환하고 함수를 종료. 움직이지 않았을때 다시 키를 받도록 한다.
-
-	push(cur_board, key, size);
-
-	return TRUE;
-}//블록을 옮기고 붙어있는 블럭을 합치고 다시 한 번 블록을 옮긴다. merge 이후 생기는 틈을 매꾼다.
 
 void updateScore(int **cur_board, int *cur_score_p, int *high_score_p, int size) {
 	int i = 0;
@@ -524,11 +467,51 @@ void updateScore(int **cur_board, int *cur_score_p, int *high_score_p, int size)
 	}
 }
 
-int isArrowKey(char key) {
-	int output = 0;
-	int lower = 0;
-	int upper = 0;
-	int arrow = 0;
+int checkMove(int **cur_board, int **pre_board, int size) {
+	int i = 0;
+	int j = 0;
+
+	for (i = 0; i < size; i++) {
+		for (j = 0; j < size; j++) {
+			if (cur_board[i][j] != pre_board[i][j])
+				return TRUE;
+		}
+	}
+	return FALSE;
+}//보드에 변경사항이 있는지 검사하고 변경사항이 있으면 조기 리턴
+
+int isGameOver(int **cur_board, int size) {
+	int i = 0, j = 0;
+
+	for (i = 0; i < size; i++) {
+		for (j = 0; j < size; j++) {
+			if (cur_board[i][j] == 0) {
+				return FALSE;
+			}
+		}
+	}
+	for (i = 0; i < size; i++) {
+		for (j = 0; j < size - 1; j++) {
+			if (cur_board[i][j] == cur_board[i][j + 1]) {
+				return FALSE;
+			}
+		}
+	}
+	for (i = 0; i < size - 1; i++) {
+		for (j = 0; j < size; j++) {
+			if (cur_board[i][j] == cur_board[i + 1][j]) {
+				return FALSE;
+			}
+		}
+	}
+	return TRUE;
+} //게임의 종료 여부 판단
+
+int isArrowKey() {
+	int output = 0;//output: 출력할 논리 값
+	int lower = 0;//lower: 소문자 논리값
+	int upper = 0;//upper: 대문자 논리 값
+	int arrow = 0;//arrow: 방향키 논리 값
 
 	lower = key == 'w' || key == 'a' || key == 's' || key == 'd';
 	upper = key == 'W' || key == 'A' || key == 'S' || key == 'D';
@@ -538,23 +521,32 @@ int isArrowKey(char key) {
 
 	return output;
 }// 입력받은 키가 방향조작키인지 확인하기 위한 함수 키를 받아서 방향키인지 확인 후 논리 값 출력
- //output: 출력할 논리 값 lower: 소문자 논리값 upper: 대문자 논리 값 arrow: 방향키 논리 값
 
 int isWin(int **board, int size) {
 	int i = 0, j = 0;
-	int win = 0;
 
-	while (i < size && win == 0) {
-		while (j < size && win == 0) {
+	for(i = 0; i < size; i++) {
+		for(j = 0; j < size; j++) {
 			if (board[i][j] == 2048) {
-				win = 1;
+				return TRUE;
 			}
-			j++;
 		}
-		i++;
 	}
-	return win;
+	return FALSE;
 }//게임 승패 여부 판단
+
+void printScore(int **board, int score, int save_score, int menu) {
+	if (menu == CURRENT) {
+		printf("\n☆ The current state ☆\n");
+		printf("   Score: %d\n   High Score: %d", score, save_score);
+		printf("\n   => Press w: up / Press a:left / Press s: down / Press d: right\n");
+		printf("   => Press e : finish the game / Press x : refresh / Press r : restore\n");
+	}
+	else if (menu == PREVIOUS) {
+		printf("\n★ The previous state ★\n");
+		printf("   Score: %d\n   High Score: %d\n\n", score, save_score);
+	}
+}//menu(CURRENT, PREVIOUS)에 따라 점수 상태, 키 안내 출력
 
 void isWinPrint(int **board, int score, int high_score, int size, int win_result) {
 	printBoard(board, size);

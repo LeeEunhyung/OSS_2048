@@ -44,9 +44,10 @@ void textcolor(int foreground, int background);
 #define B_CYAN "[46m"
 //색상 값 define
 
-int _getch();
+char _getch();
 
 #define ARROW 27
+#define SECOND_ARROW 91
 
 #define LEFT 'D'
 #define RIGHT 'C'
@@ -55,8 +56,6 @@ int _getch();
 //방향키 값 define
 
 #endif
-
-#define SECOND_ARROW 91 //Linux 두 번째 방향키 값
 
 #define TRUE 1
 #define FALSE 0
@@ -70,37 +69,33 @@ char key;
 void clearWindow();
 
 int inputBoardSize();
+
 int** allocateArr(int **arr, int size);
 int** setUp(int **arr, int size);
-void tilesEmptyBoard(int **board, int size);
 
-void findEmpty();
+void tilesEmptyBoard(int **board, int size);
+void spawnBlock(int **cur_board, int *emptyIndex, int size);
 
 void refreshGame(int **cur_board, int **pre_board, int size);
 void undo(int **cur_board, int **pre_board, int size);
-int isGameOver(int **cur_board, int size);
+
+int move(int **cur_board, int **pre_board, int size);
+
+void push(int **cur_board, int size);
+void merge(int **cur_board, int size);
 
 void save(int **cur_board, int **pre_board, int *cur_score, int *pre_score, int size);
 
-void push(int **cur_board, char key, int size);
-
-void merge(int **cur_board, char key, int size);
-
-void spawnBlock(int **cur_board, int *emptyIndex, int size);
+void updateScore(int **cur_board, int *cur_score, int *high_score, int size);
 
 int checkMove(int **cur_board, int **pre_board, int size);
 
-void printBoard(int **board, int size);
-
-void printScore(int **board, int score, int save_score, int menu);
-
-int move(char key, int **cur_board, int **pre_board, int size);
-
-void updateScore(int **cur_board, int *cur_score, int *high_score, int size);
-
-int isArrowKey(char key);
-
+int isGameOver(int **cur_board, int size);
+int isArrowKey();
 int isWin(int **board, int size);
+
+void printBoard(int **board, int size);
+void printScore(int **board, int score, int save_score, int menu);
 void isWinPrint(int **board, int score, int high_score, int size, int win_result);
 
 #endif
