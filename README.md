@@ -1,4 +1,7 @@
 # 2048 GAME
+
+**2048 GAME**은 상하좌우로 타일을 움직여 같은 숫자를 가진 타일을 합치는 게임이다. 플레이어는 이 과정을 반복하다가 한 타일의 값이 2048이 되면 게임에서 승리 하고, 2048을 만들지 못하고 게임 보드가 다 차게 되면 패배 한다.
+
 ## How to play
 1. 게임이 시작되면 GAME BOARD의 크기를 입력한다. 예를 들어 4를 입력하면 4X4의 GAME BOARD가 만들어진다.
    정상적인 2048 GAME을 즐기기 위해 **크기는 2 이상의 수를 입력**한다.
@@ -18,4 +21,3 @@
 2. [우리 프로젝트의 저장소](https://github.com/LeeEunhyung/OSS_2048)
 3. [Wiki](https://github.com/LeeEunhyung/OSS_2048/wiki)
 4. [Issues](https://github.com/LeeEunhyung/OSS_2048/issues/new): 해당 OSS에 문제가 있다면 이 곳에 제보해주세요! 
-
